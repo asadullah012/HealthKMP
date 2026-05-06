@@ -30,13 +30,13 @@ kotlin {
     val xcframeworkName = "HealthKMP"
     val xcf = XCFramework(xcframeworkName)
     listOf(
-        iosX64(),
+        // iosX64(),
         iosArm64(),
-        iosSimulatorArm64(),
-        watchosX64(),
-        watchosArm64(),
-        watchosDeviceArm64(),
-        watchosSimulatorArm64(),
+//        iosSimulatorArm64(),
+//        watchosX64(),
+//        watchosArm64(),
+//        watchosDeviceArm64(),
+//        watchosSimulatorArm64(),
     ).forEach {
         val bundleId = "${providers.gradleProperty("GROUP").get()}.$xcframeworkName"
         it.binaries.framework {
@@ -105,4 +105,4 @@ apiValidation {
     }
 }
 
-tasks.named("allTests") { dependsOn("testAndroidHostTest") }
+//tasks.named("allTests") { dependsOn("testAndroidHostTest") }

@@ -3,6 +3,8 @@
 package com.viktormykhailiv.kmp.health
 
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodGlucose
+import com.viktormykhailiv.kmp.health.HealthDataType.Distance
+import com.viktormykhailiv.kmp.health.HealthDataType.ActiveEnergyBurned
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
@@ -24,6 +26,8 @@ import com.viktormykhailiv.kmp.health.aggregate.BloodPressureAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.BodyFatAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.BodyTemperatureAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.CyclingPedalingCadenceAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.DistanceAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.ActiveEnergyBurnedAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.HeartRateAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.HeightAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.LeanBodyMassAggregatedRecord
@@ -38,6 +42,7 @@ import kotlinx.cinterop.UnsafeNumber
 import kotlin.time.Instant
 import kotlinx.datetime.toKotlinInstant
 import platform.HealthKit.HKQuantityType
+import platform.HealthKit.HKQuantityTypeIdentifierActiveEnergyBurned
 import platform.HealthKit.HKQuantityTypeIdentifierBloodGlucose
 import platform.HealthKit.HKQuantityTypeIdentifierBloodPressureDiastolic
 import platform.HealthKit.HKQuantityTypeIdentifierBloodPressureSystolic
@@ -46,6 +51,7 @@ import platform.HealthKit.HKQuantityTypeIdentifierBodyMass
 import platform.HealthKit.HKQuantityTypeIdentifierBodyTemperature
 import platform.HealthKit.HKQuantityTypeIdentifierCyclingCadence
 import platform.HealthKit.HKQuantityTypeIdentifierCyclingPower
+import platform.HealthKit.HKQuantityTypeIdentifierDistanceWalkingRunning
 import platform.HealthKit.HKQuantityTypeIdentifierHeartRate
 import platform.HealthKit.HKQuantityTypeIdentifierHeight
 import platform.HealthKit.HKQuantityTypeIdentifierLeanBodyMass
@@ -61,6 +67,12 @@ import kotlin.time.Duration.Companion.seconds
 internal fun HealthDataType.toHKQuantityType(): List<HKQuantityType?> = when (this) {
     BloodGlucose ->
         listOf(HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose))
+
+    Distance ->
+        listOf(HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierDistanceWalkingRunning))
+
+    ActiveEnergyBurned ->
+        listOf(HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierActiveEnergyBurned))
 
     BloodPressure ->
         listOf(
@@ -120,6 +132,12 @@ internal fun HealthDataType.toHKQuantityType(): List<HKQuantityType?> = when (th
 internal fun HealthDataType.toHKStatisticOptions(): HKStatisticsOptions = when (this) {
     BloodGlucose ->
         discreteStatisticsOptions()
+
+    Distance ->
+        HKStatisticsOptionCumulativeSum
+
+    ActiveEnergyBurned ->
+        HKStatisticsOptionCumulativeSum
 
     BloodPressure ->
         discreteStatisticsOptions()
@@ -182,6 +200,14 @@ internal suspend fun List<HKStatistics>.toHealthAggregatedRecord(
 ): HealthAggregatedRecord? {
     val record = first()
     return when (record.quantityType.identifier) {
+        HKQuantityTypeIdentifierActiveEnergyBurned -> {
+            ActiveEnergyBurnedAggregatedRecord(
+                startTime = record.startDate.toKotlinInstant(),
+                endTime = record.endDate.toKotlinInstant(),
+                energy = record.sumQuantity().energyValue,
+            )
+        }
+
         HKQuantityTypeIdentifierBloodGlucose -> {
             BloodGlucoseAggregatedRecord(
                 startTime = record.startDate.toKotlinInstant(),
@@ -242,6 +268,14 @@ internal suspend fun List<HKStatistics>.toHealthAggregatedRecord(
                 avg = record.averageQuantity().rpmValue,
                 min = record.minimumQuantity().rpmValue,
                 max = record.maximumQuantity().rpmValue,
+            )
+        }
+
+        HKQuantityTypeIdentifierDistanceWalkingRunning -> {
+            DistanceAggregatedRecord(
+                startTime = record.startDate.toKotlinInstant(),
+                endTime = record.endDate.toKotlinInstant(),
+                distance = record.sumQuantity().lengthValue,
             )
         }
 

@@ -5,6 +5,9 @@ package com.viktormykhailiv.kmp.health
  */
 sealed interface HealthDataType {
 
+    /** Active energy burned measurement. */
+    data object ActiveEnergyBurned : HealthDataType
+
     /** Blood glucose measurement. */
     data object BloodGlucose : HealthDataType
 
@@ -19,6 +22,9 @@ sealed interface HealthDataType {
 
     /** Number of pedal cycles per minute during cycling. */
     data object CyclingPedalingCadence : HealthDataType
+
+    /** Distance measurement. */
+    data object Distance : HealthDataType
 
     /**
      * Exercise session information.

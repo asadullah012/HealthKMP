@@ -6,6 +6,8 @@ import com.viktormykhailiv.kmp.health.records.BloodPressureRecord
 import com.viktormykhailiv.kmp.health.records.BodyFatRecord
 import com.viktormykhailiv.kmp.health.records.BodyTemperatureRecord
 import com.viktormykhailiv.kmp.health.records.CyclingPedalingCadenceRecord
+import com.viktormykhailiv.kmp.health.records.DistanceRecord
+import com.viktormykhailiv.kmp.health.records.ActiveEnergyBurnedRecord
 import com.viktormykhailiv.kmp.health.records.ExerciseLap
 import com.viktormykhailiv.kmp.health.records.ExerciseRoute
 import com.viktormykhailiv.kmp.health.records.ExerciseSegment
@@ -29,12 +31,14 @@ import com.viktormykhailiv.kmp.health.records.metadata.DeviceType
 import com.viktormykhailiv.kmp.health.records.metadata.Metadata
 import com.viktormykhailiv.kmp.health.region.TemperatureRegionalPreference
 import com.viktormykhailiv.kmp.health.units.BloodGlucose
+import com.viktormykhailiv.kmp.health.units.Energy
 import com.viktormykhailiv.kmp.health.units.Length
 import com.viktormykhailiv.kmp.health.units.Mass
 import com.viktormykhailiv.kmp.health.units.Percentage
 import com.viktormykhailiv.kmp.health.units.Power
 import com.viktormykhailiv.kmp.health.units.Pressure
 import com.viktormykhailiv.kmp.health.units.Temperature
+import com.viktormykhailiv.kmp.health.units.kilocalories
 import kotlin.time.toJavaInstant
 import kotlin.time.toKotlinInstant
 import androidx.health.connect.client.records.BloodGlucoseRecord as HCBloodGlucoseRecord
@@ -43,6 +47,7 @@ import androidx.health.connect.client.records.BodyFatRecord as HCBodyFatRecord
 import androidx.health.connect.client.records.BodyTemperatureMeasurementLocation as HCBodyTemperatureMeasurementLocation
 import androidx.health.connect.client.records.BodyTemperatureRecord as HCBodyTemperatureRecord
 import androidx.health.connect.client.records.CyclingPedalingCadenceRecord as HCPedalingCadenceRecord
+import androidx.health.connect.client.records.DistanceRecord as HCDistanceRecord
 import androidx.health.connect.client.records.ExerciseLap as HCExerciseLap
 import androidx.health.connect.client.records.ExerciseRoute as HCExerciseRoute
 import androidx.health.connect.client.records.ExerciseRouteResult as HCExerciseRouteResult
@@ -60,10 +65,12 @@ import androidx.health.connect.client.records.Record as HCRecord
 import androidx.health.connect.client.records.SexualActivityRecord as HCSexualActivityRecord
 import androidx.health.connect.client.records.SleepSessionRecord as HCSleepSessionRecord
 import androidx.health.connect.client.records.StepsRecord as HCStepsRecord
+import androidx.health.connect.client.records.TotalCaloriesBurnedRecord as HCTotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.WeightRecord as HCWeightRecord
 import androidx.health.connect.client.records.metadata.Metadata as HCMetadata
 import androidx.health.connect.client.records.metadata.Device as HCDevice
 import androidx.health.connect.client.units.BloodGlucose as HCBloodGlucose
+import androidx.health.connect.client.units.Energy as HCEnergy
 import androidx.health.connect.client.units.Length as HCLength
 import androidx.health.connect.client.units.Mass as HCMass
 import androidx.health.connect.client.units.Percentage as HCPercentage
@@ -76,6 +83,15 @@ import androidx.health.connect.client.units.Temperature as HCTemperature
 internal fun HealthRecord.toHCRecord(
     temperaturePreference: () -> TemperatureRegionalPreference,
 ): HCRecord? = when (val record = this) {
+    is ActiveEnergyBurnedRecord -> HCTotalCaloriesBurnedRecord(
+        startTime = record.startTime.toJavaInstant(),
+        endTime = record.endTime.toJavaInstant(),
+        startZoneOffset = null,
+        endZoneOffset = null,
+        energy = HCEnergy.kilocalories(record.energy.inKilocalories),
+        metadata = record.metadata.toHCMetadata(),
+    )
+
     is BloodGlucoseRecord -> HCBloodGlucoseRecord(
         time = record.time.toJavaInstant(),
         zoneOffset = null,
@@ -152,6 +168,15 @@ internal fun HealthRecord.toHCRecord(
             BodyTemperatureRecord.MeasurementLocation.Vagina -> HCBodyTemperatureMeasurementLocation.MEASUREMENT_LOCATION_VAGINA
             null -> HCBodyTemperatureMeasurementLocation.MEASUREMENT_LOCATION_UNKNOWN
         },
+        metadata = record.metadata.toHCMetadata(),
+    )
+
+    is DistanceRecord -> HCDistanceRecord(
+        startTime = record.startTime.toJavaInstant(),
+        endTime = record.endTime.toJavaInstant(),
+        startZoneOffset = null,
+        endZoneOffset = null,
+        distance = record.distance.toHCLength(),
         metadata = record.metadata.toHCMetadata(),
     )
 
@@ -465,6 +490,13 @@ internal fun HealthRecord.toHCRecord(
 internal fun HCRecord.toHealthRecord(
     temperaturePreference: () -> TemperatureRegionalPreference,
 ): HealthRecord? = when (val record = this) {
+    is HCTotalCaloriesBurnedRecord -> ActiveEnergyBurnedRecord(
+        startTime = record.startTime.toKotlinInstant(),
+        endTime = record.endTime.toKotlinInstant(),
+        energy = record.energy.toEnergy(),
+        metadata = record.metadata.toMetadata(),
+    )
+
     is HCBloodGlucoseRecord -> BloodGlucoseRecord(
         time = record.time.toKotlinInstant(),
         level = BloodGlucose.millimolesPerLiter(level.inMillimolesPerLiter),
@@ -549,6 +581,13 @@ internal fun HCRecord.toHealthRecord(
                 revolutionsPerMinute = sample.revolutionsPerMinute,
             )
         },
+        metadata = record.metadata.toMetadata(),
+    )
+
+    is HCDistanceRecord -> DistanceRecord(
+        startTime = record.startTime.toKotlinInstant(),
+        endTime = record.endTime.toKotlinInstant(),
+        distance = record.distance.toLength(),
         metadata = record.metadata.toMetadata(),
     )
 
@@ -940,3 +979,7 @@ internal fun Temperature.preferred(preference: TemperatureRegionalPreference): H
         TemperatureRegionalPreference.Celsius -> HCTemperature.celsius(inCelsius)
         TemperatureRegionalPreference.Fahrenheit -> HCTemperature.fahrenheit(inFahrenheit)
     }
+
+internal fun HCEnergy.toEnergy(): Energy =
+    inKilocalories.kilocalories
+

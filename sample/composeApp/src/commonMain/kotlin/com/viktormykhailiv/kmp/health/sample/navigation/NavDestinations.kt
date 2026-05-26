@@ -8,6 +8,9 @@ sealed interface NavDestinations {
     data object Root : NavDestinations
 
     @Serializable
+    data object ActiveEnergyBurned : NavDestinations
+
+    @Serializable
     data object BloodGlucose : NavDestinations
 
     @Serializable
@@ -21,6 +24,9 @@ sealed interface NavDestinations {
 
     @Serializable
     data object CyclingPedalingCadence : NavDestinations
+
+    @Serializable
+    data object Distance : NavDestinations
 
     @Serializable
     data object Exercise : NavDestinations

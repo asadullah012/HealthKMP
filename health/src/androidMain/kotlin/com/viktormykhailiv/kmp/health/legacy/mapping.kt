@@ -8,6 +8,8 @@ import com.google.android.gms.fitness.data.Field
 import com.google.android.gms.fitness.data.SleepStages
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodGlucose
+import com.viktormykhailiv.kmp.health.HealthDataType.Distance
+import com.viktormykhailiv.kmp.health.HealthDataType.ActiveEnergyBurned
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
@@ -27,6 +29,8 @@ import com.viktormykhailiv.kmp.health.HealthDataType.Weight
 import com.viktormykhailiv.kmp.health.HealthRecord
 import com.viktormykhailiv.kmp.health.groupByRecords
 import com.viktormykhailiv.kmp.health.records.BodyFatRecord
+import com.viktormykhailiv.kmp.health.records.DistanceRecord
+import com.viktormykhailiv.kmp.health.records.ActiveEnergyBurnedRecord
 import com.viktormykhailiv.kmp.health.records.HeartRateRecord
 import com.viktormykhailiv.kmp.health.records.HeightRecord
 import com.viktormykhailiv.kmp.health.records.SleepSessionRecord
@@ -46,6 +50,19 @@ import com.google.android.gms.fitness.data.Device as FitnessDevice
 
 internal fun List<DataPoint>.toHealthRecords(type: HealthDataType): List<HealthRecord> {
     return when (type) {
+        is ActiveEnergyBurned -> {
+            map { dataPoint ->
+                ActiveEnergyBurnedRecord(
+                    startTime = dataPoint.startTime,
+                    endTime = dataPoint.endTime,
+                    energy = com.viktormykhailiv.kmp.health.units.Energy.kilocalories(
+                        dataPoint.getValue(Field.FIELD_CALORIES).asFloat().toDouble(),
+                    ),
+                    metadata = dataPoint.toMetadata(),
+                )
+            }
+        }
+
         is BloodGlucose ->
             throw IllegalArgumentException("BloodGlucose is not supported")
 
@@ -67,6 +84,19 @@ internal fun List<DataPoint>.toHealthRecords(type: HealthDataType): List<HealthR
 
         is CyclingPedalingCadence ->
             throw IllegalArgumentException("PedalingCadence is not supported")
+
+        is Distance -> {
+            map { dataPoint ->
+                DistanceRecord(
+                    startTime = dataPoint.startTime,
+                    endTime = dataPoint.endTime,
+                    distance = Length.meters(
+                        dataPoint.getValue(Field.FIELD_DISTANCE).asFloat().toDouble(),
+                    ),
+                    metadata = dataPoint.toMetadata(),
+                )
+            }
+        }
 
         is Exercise ->
             throw IllegalArgumentException("Exercise is not supported")
@@ -176,7 +206,7 @@ internal fun List<HealthRecord>.toDataSets(context: Context): List<DataSet> {
                 .setAppPackageName(context.applicationContext)
                 .build()
 
-            val dataPoints = recordsByType.map { it.toDataPoints(dataSource) }.flatten()
+            val dataPoints = recordsByType.flatMap { it.toDataPoints(dataSource) }
 
             DataSet.builder(dataSource)
                 .addAll(dataPoints)
@@ -187,6 +217,32 @@ internal fun List<HealthRecord>.toDataSets(context: Context): List<DataSet> {
 private fun HealthRecord.toDataPoints(
     dataSource: DataSource,
 ): List<DataPoint> = when (val record = this) {
+    is ActiveEnergyBurnedRecord -> {
+        listOf(
+            DataPoint.builder(dataSource)
+                .setTimeInterval(
+                    record.startTime.toEpochMilliseconds(),
+                    record.endTime.toEpochMilliseconds(),
+                    TimeUnit.MILLISECONDS,
+                )
+                .setField(Field.FIELD_CALORIES, record.energy.inKilocalories.toFloat())
+                .build()
+        )
+    }
+
+    is DistanceRecord -> {
+        listOf(
+            DataPoint.builder(dataSource)
+                .setTimeInterval(
+                    record.startTime.toEpochMilliseconds(),
+                    record.endTime.toEpochMilliseconds(),
+                    TimeUnit.MILLISECONDS,
+                )
+                .setField(Field.FIELD_DISTANCE, record.distance.inMeters.toFloat())
+                .build()
+        )
+    }
+
     is HeartRateRecord -> {
         record.samples.map { sample ->
             DataPoint.builder(dataSource)

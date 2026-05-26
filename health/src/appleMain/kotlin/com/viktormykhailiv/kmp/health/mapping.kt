@@ -7,6 +7,8 @@ import com.viktormykhailiv.kmp.health.records.BloodPressureRecord
 import com.viktormykhailiv.kmp.health.records.BodyFatRecord
 import com.viktormykhailiv.kmp.health.records.BodyTemperatureRecord
 import com.viktormykhailiv.kmp.health.records.CyclingPedalingCadenceRecord
+import com.viktormykhailiv.kmp.health.records.DistanceRecord
+import com.viktormykhailiv.kmp.health.records.ActiveEnergyBurnedRecord
 import com.viktormykhailiv.kmp.health.records.ExerciseLap
 import com.viktormykhailiv.kmp.health.records.ExerciseRoute
 import com.viktormykhailiv.kmp.health.records.ExerciseSegment
@@ -81,7 +83,7 @@ import platform.HealthKit.HKObjectType
 import platform.HealthKit.HKQuantity
 import platform.HealthKit.HKQuantitySample
 import platform.HealthKit.HKQuantityType
-import platform.HealthKit.HKQuantityTypeIdentifier
+import platform.HealthKit.HKQuantityTypeIdentifierActiveEnergyBurned
 import platform.HealthKit.HKQuantityTypeIdentifierBloodGlucose
 import platform.HealthKit.HKQuantityTypeIdentifierBloodPressureDiastolic
 import platform.HealthKit.HKQuantityTypeIdentifierBloodPressureSystolic
@@ -94,6 +96,7 @@ import platform.HealthKit.HKQuantityTypeIdentifierHeartRate
 import platform.HealthKit.HKQuantityTypeIdentifierHeight
 import platform.HealthKit.HKQuantityTypeIdentifierLeanBodyMass
 import platform.HealthKit.HKQuantityTypeIdentifierStepCount
+import platform.HealthKit.HKQuantityTypeIdentifierDistanceWalkingRunning
 import platform.HealthKit.HKUnit
 import platform.HealthKit.HKUnitMolarMassBloodGlucose
 import platform.HealthKit.HKWorkout
@@ -170,13 +173,23 @@ import kotlin.time.Duration.Companion.days
 internal fun HealthRecord.toHKObjects(): List<HKObject>? {
     val record = this
 
-    val quantityTypeIdentifier: HKQuantityTypeIdentifier
+    val quantityTypeIdentifier: String?
     val quantity: HKQuantity
     val startDate: NSDate
     val endDate: NSDate
     val metadata = record.metadata.toHKMetadata()
 
     when (record) {
+        is ActiveEnergyBurnedRecord -> {
+            quantityTypeIdentifier = HKQuantityTypeIdentifierActiveEnergyBurned
+            quantity = HKQuantity.quantityWithUnit(
+                unit = energyUnit,
+                doubleValue = record.energy.inKilocalories,
+            )
+            startDate = record.startTime.toNSDate()
+            endDate = record.endTime.toNSDate()
+        }
+
         is BloodGlucoseRecord -> {
             quantityTypeIdentifier = HKQuantityTypeIdentifierBloodGlucose
             quantity = HKQuantity.quantityWithUnit(
@@ -207,7 +220,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
             return listOf(
                 HKQuantitySample.quantitySampleWithType(
                     quantityType = HKQuantityType.quantityTypeForIdentifier(
-                        HKQuantityTypeIdentifierBloodPressureSystolic
+                        HKQuantityTypeIdentifierBloodPressureSystolic ?: return null
                     ) ?: return null,
                     quantity = HKQuantity.quantityWithUnit(
                         unit = bloodPressureUnit,
@@ -219,7 +232,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
                 ),
                 HKQuantitySample.quantitySampleWithType(
                     quantityType = HKQuantityType.quantityTypeForIdentifier(
-                        HKQuantityTypeIdentifierBloodPressureDiastolic
+                        HKQuantityTypeIdentifierBloodPressureDiastolic ?: return null
                     ) ?: return null,
                     quantity = HKQuantity.quantityWithUnit(
                         unit = bloodPressureUnit,
@@ -236,7 +249,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
             quantityTypeIdentifier = HKQuantityTypeIdentifierBodyFatPercentage
             quantity = HKQuantity.quantityWithUnit(
                 unit = bodyFatUnit,
-                doubleValue = record.percentage.value,
+                doubleValue = record.percentage.value / 100.0,
             )
             startDate = record.time.toNSDate()
             endDate = record.time.toNSDate()
@@ -257,8 +270,9 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
             return record.samples.map { sample ->
                 HKQuantitySample.quantitySampleWithType(
-                    quantityType = HKQuantityType.quantityTypeForIdentifier(quantityTypeIdentifier)
-                        ?: return null,
+                    quantityType = HKQuantityType.quantityTypeForIdentifier(
+                        quantityTypeIdentifier ?: return@map null
+                    ) ?: return@map null,
                     quantity = HKQuantity.quantityWithUnit(
                         unit = rpmUnit,
                         doubleValue = sample.revolutionsPerMinute,
@@ -267,7 +281,17 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
                     endDate = sample.time.toNSDate(),
                     metadata = metadata,
                 )
-            }
+            }.filterNotNull()
+        }
+
+        is DistanceRecord -> {
+            quantityTypeIdentifier = HKQuantityTypeIdentifierDistanceWalkingRunning
+            quantity = HKQuantity.quantityWithUnit(
+                unit = lengthUnit,
+                doubleValue = record.distance.inMeters,
+            )
+            startDate = record.startTime.toNSDate()
+            endDate = record.endTime.toNSDate()
         }
 
         is ExerciseSessionRecord -> {
@@ -302,8 +326,9 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
             return record.samples.map { sample ->
                 HKQuantitySample.quantitySampleWithType(
-                    quantityType = HKQuantityType.quantityTypeForIdentifier(quantityTypeIdentifier)
-                        ?: return null,
+                    quantityType = HKQuantityType.quantityTypeForIdentifier(
+                        quantityTypeIdentifier ?: return@map null
+                    ) ?: return@map null,
                     quantity = HKQuantity.quantityWithUnit(
                         unit = heartRateUnit,
                         doubleValue = sample.beatsPerMinute.toDouble(),
@@ -312,7 +337,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
                     endDate = sample.time.toNSDate(),
                     metadata = metadata,
                 )
-            }
+            }.filterNotNull()
         }
 
         is HeightRecord -> {
@@ -337,8 +362,11 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
         is MenstruationFlowRecord -> {
             val typeIdentifier = HKObjectType
-                .categoryTypeForIdentifier(HKCategoryTypeIdentifierMenstrualFlow)!!
+                .categoryTypeForIdentifier(HKCategoryTypeIdentifierMenstrualFlow!!)!!
 
+            val metadata = metadata.toMutableMap()
+            metadata[HKMetadataKeyWasUserEntered] =
+                record.metadata.recordingMethod is Metadata.RecordingMethod.ManualEntry
             metadata[HKMetadataKeyMenstrualCycleStart] = false
 
             return listOf(
@@ -359,7 +387,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
         is MenstruationPeriodRecord -> {
             val typeIdentifier = HKObjectType
-                .categoryTypeForIdentifier(HKCategoryTypeIdentifierMenstrualFlow)!!
+                .categoryTypeForIdentifier(HKCategoryTypeIdentifierMenstrualFlow!!)!!
 
             return List(
                 record.startTime.daysUntil(record.endTime, TimeZone.currentSystemDefault()) + 1
@@ -379,7 +407,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
         is OvulationTestRecord -> {
             val typeIdentifier = HKObjectType
-                .categoryTypeForIdentifier(HKCategoryTypeIdentifierOvulationTestResult)!!
+                .categoryTypeForIdentifier(HKCategoryTypeIdentifierOvulationTestResult!!)!!
 
             return listOf(
                 HKCategorySample.categorySampleWithType(
@@ -403,8 +431,9 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
             return record.samples.map { sample ->
                 HKQuantitySample.quantitySampleWithType(
-                    quantityType = HKQuantityType.quantityTypeForIdentifier(quantityTypeIdentifier)
-                        ?: return null,
+                    quantityType = HKQuantityType.quantityTypeForIdentifier(
+                        quantityTypeIdentifier ?: return@map null
+                    ) ?: return@map null,
                     quantity = HKQuantity.quantityWithUnit(
                         unit = wattUnit,
                         doubleValue = sample.power.inWatts,
@@ -413,12 +442,12 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
                     endDate = sample.time.toNSDate(),
                     metadata = metadata,
                 )
-            }
+            }.filterNotNull()
         }
 
         is SexualActivityRecord -> {
             val typeIdentifier = HKObjectType
-                .categoryTypeForIdentifier(HKCategoryTypeIdentifierSexualActivity)!!
+                .categoryTypeForIdentifier(HKCategoryTypeIdentifierSexualActivity!!)!!
 
             metadata[HKMetadataKeySexualActivityProtectionUsed] =
                 record.protection is SexualActivityRecord.Protection.Protected
@@ -436,7 +465,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
         is SleepSessionRecord -> {
             val typeIdentifier = HKObjectType
-                .categoryTypeForIdentifier(HKCategoryTypeIdentifierSleepAnalysis)!!
+                .categoryTypeForIdentifier(HKCategoryTypeIdentifierSleepAnalysis!!)!!
 
             return record.stages.map { stage ->
                 val sleepCategory = when (stage.type) {
@@ -484,7 +513,7 @@ internal fun HealthRecord.toHKObjects(): List<HKObject>? {
 
     return listOf(
         HKQuantitySample.quantitySampleWithType(
-            quantityType = HKQuantityType.quantityTypeForIdentifier(quantityTypeIdentifier)
+            quantityType = HKQuantityType.quantityTypeForIdentifier(quantityTypeIdentifier!!)
                 ?: return null,
             quantity = quantity,
             startDate = startDate,
@@ -518,30 +547,38 @@ internal fun List<HKCategorySample>.toHealthRecords(): List<HealthRecord> {
             }
 
             val periodRecords = mutableListOf<MenstruationPeriodRecord>()
-            var periodStartedAt = samples.first().startDate.toKotlinInstant()
-            val timeZone = TimeZone.currentSystemDefault()
-            for (i in 1 until samples.size) {
-                val sample = samples[i]
+            if (samples.isNotEmpty()) {
+                var periodStartedAt = samples.first().startDate.toKotlinInstant()
+                val timeZone = TimeZone.currentSystemDefault()
+                for (i in 0 until samples.size) {
+                    val sample = samples[i]
+                    if (i > 0) {
+                        val previousDate = samples[i - 1].startDate.toKotlinInstant().midnight()
+                        val currentDate = sample.startDate.toKotlinInstant().midnight()
+                        val days = previousDate.daysUntil(currentDate, timeZone)
+                        if (days > 1) {
+                            val endTime = samples[i - 1].endDate.toKotlinInstant()
+                            if (periodStartedAt < endTime) {
+                                periodRecords += MenstruationPeriodRecord(
+                                    startTime = periodStartedAt,
+                                    endTime = endTime,
+                                    metadata = samples[i - 1].toMetadata(),
+                                )
+                            }
+                            periodStartedAt = sample.startDate.toKotlinInstant()
+                        }
+                    }
 
-                val previousDate = samples[i - 1].startDate.toKotlinInstant().midnight()
-                val currentDate = sample.startDate.toKotlinInstant().midnight()
-                val days = previousDate.daysUntil(currentDate, timeZone)
-                if (days > 1) {
-                    periodRecords += MenstruationPeriodRecord(
-                        startTime = periodStartedAt,
-                        endTime = samples[i - 1].endDate.toKotlinInstant(),
-                        metadata = sample.toMetadata(),
-                    )
-                    periodStartedAt = sample.startDate.toKotlinInstant()
-                    continue
-                }
-
-                if (i == samples.size - 1) {
-                    periodRecords += MenstruationPeriodRecord(
-                        startTime = periodStartedAt,
-                        endTime = sample.endDate.toKotlinInstant(),
-                        metadata = sample.toMetadata(),
-                    )
+                    if (i == samples.size - 1) {
+                        val endTime = sample.endDate.toKotlinInstant()
+                        if (periodStartedAt < endTime) {
+                            periodRecords += MenstruationPeriodRecord(
+                                startTime = periodStartedAt,
+                                endTime = endTime,
+                                metadata = sample.toMetadata(),
+                            )
+                        }
+                    }
                 }
             }
 
@@ -590,7 +627,8 @@ internal fun List<HKCategorySample>.toHealthRecords(): List<HealthRecord> {
 
         HKCategoryTypeIdentifierSleepAnalysis -> {
             val first = firstOrNull()
-            val metadata = first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
+            val metadata =
+                first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
             map { sample ->
                 val startTime = sample.startDate.toKotlinInstant()
                 val endTime = sample.endDate.toKotlinInstant()
@@ -631,6 +669,28 @@ internal suspend fun List<HKQuantitySample>.toHealthRecord(
                         HKBloodGlucoseMealTimePostprandial -> BloodGlucoseRecord.RelationToMeal.AfterMeal
                         else -> null
                     },
+                    metadata = sample.toMetadata(),
+                )
+            }
+        }
+
+        HKQuantityTypeIdentifierDistanceWalkingRunning -> {
+            map { sample ->
+                DistanceRecord(
+                    startTime = sample.startDate.toKotlinInstant(),
+                    endTime = sample.endDate.toKotlinInstant(),
+                    distance = sample.quantity.lengthValue,
+                    metadata = sample.toMetadata(),
+                )
+            }
+        }
+
+        HKQuantityTypeIdentifierActiveEnergyBurned -> {
+            map { sample ->
+                ActiveEnergyBurnedRecord(
+                    startTime = sample.startDate.toKotlinInstant(),
+                    endTime = sample.endDate.toKotlinInstant(),
+                    energy = sample.quantity.energyValue,
                     metadata = sample.toMetadata(),
                 )
             }
@@ -693,7 +753,8 @@ internal suspend fun List<HKQuantitySample>.toHealthRecord(
 
         HKQuantityTypeIdentifierCyclingCadence -> {
             val first = firstOrNull()
-            val metadata = first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
+            val metadata =
+                first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
             map { sample ->
                 CyclingPedalingCadenceRecord.Sample(
                     time = sample.startDate.toKotlinInstant(),
@@ -714,7 +775,8 @@ internal suspend fun List<HKQuantitySample>.toHealthRecord(
 
         HKQuantityTypeIdentifierHeartRate -> {
             val first = firstOrNull()
-            val metadata = first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
+            val metadata =
+                first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
             map { sample ->
                 HeartRateSampleInternal(
                     startTime = sample.startDate.toKotlinInstant(),
@@ -767,7 +829,8 @@ internal suspend fun List<HKQuantitySample>.toHealthRecord(
 
         HKQuantityTypeIdentifierCyclingPower -> {
             val first = firstOrNull()
-            val metadata = first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
+            val metadata =
+                first?.metadata.toHealthMetadata(id = first?.UUID, device = first?.device)
             map { sample ->
                 PowerRecord.Sample(
                     time = sample.startDate.toKotlinInstant(),
@@ -891,7 +954,7 @@ internal fun Temperature.preferred(temperaturePreference: TemperatureRegionalPre
     }
 
 internal val HKQuantity?.bodyFatValue: Percentage
-    get() = this?.doubleValueForUnit(bodyFatUnit)?.percent ?: 0.percent
+    get() = (this?.doubleValueForUnit(bodyFatUnit)?.let { it * 100.0 } ?: 0.0).percent
 
 private val bodyFatUnit: HKUnit
     get() = HKUnit.percentUnit()
@@ -1149,11 +1212,11 @@ private fun HKWorkout.toMetadata(): Metadata {
 
 internal fun Map<Any?, Any?>?.toHealthMetadata(id: NSUUID?, device: HKDevice?): Metadata {
     val metadata = this.orEmpty()
-    val id = id?.UUIDString ?: Metadata.EMPTY_ID
+    val idString = id?.UUIDString ?: Metadata.EMPTY_ID
 
     val deviceManufacturer = device?.manufacturer
     val deviceName = device?.name
-    val device = if (deviceManufacturer != null || deviceName != null) {
+    val deviceInternal = if (deviceManufacturer != null || deviceName != null) {
         Device(
             type = when {
                 deviceName.orEmpty().contains("iphone", ignoreCase = true) -> {
@@ -1177,15 +1240,15 @@ internal fun Map<Any?, Any?>?.toHealthMetadata(id: NSUUID?, device: HKDevice?): 
 
     return when {
         metadata.metadataBooleanTrue(HKMetadataKeyWasUserEntered) -> {
-            Metadata.manualEntry(id = id, device = device)
+            Metadata.manualEntry(id = idString, device = deviceInternal)
         }
 
-        device != null -> {
-            Metadata.autoRecorded(id = id, device = device)
+        deviceInternal != null -> {
+            Metadata.autoRecorded(id = idString, device = deviceInternal)
         }
 
         else -> {
-            Metadata.unknownRecordingMethod(id = id, device = device)
+            Metadata.unknownRecordingMethod(id = idString, device = deviceInternal)
         }
     }
 }

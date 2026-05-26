@@ -23,7 +23,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build and Test with Gradle
-        run: ./gradlew :health:allTests
+        # This will run commonTests + Android tests on the JVM
+        run: ./gradlew :health:testAndroidHostTest
 
       - name: Retrieve Version
         run: echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_ENV

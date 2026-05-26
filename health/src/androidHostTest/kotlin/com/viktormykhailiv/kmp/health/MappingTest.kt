@@ -1,10 +1,14 @@
 package com.viktormykhailiv.kmp.health
 
+import com.viktormykhailiv.kmp.health.records.ActiveEnergyBurnedRecord
 import com.viktormykhailiv.kmp.health.records.BloodGlucoseRecord
 import com.viktormykhailiv.kmp.health.records.BloodPressureRecord
 import com.viktormykhailiv.kmp.health.records.BodyFatRecord
 import com.viktormykhailiv.kmp.health.records.BodyTemperatureRecord
 import com.viktormykhailiv.kmp.health.records.CyclingPedalingCadenceRecord
+import com.viktormykhailiv.kmp.health.records.DistanceRecord
+import com.viktormykhailiv.kmp.health.records.ExerciseLap
+import com.viktormykhailiv.kmp.health.records.ExerciseSegment
 import com.viktormykhailiv.kmp.health.records.ExerciseSessionRecord
 import com.viktormykhailiv.kmp.health.records.ExerciseType
 import com.viktormykhailiv.kmp.health.records.HeartRateRecord
@@ -23,6 +27,7 @@ import com.viktormykhailiv.kmp.health.records.metadata.Metadata
 import com.viktormykhailiv.kmp.health.region.TemperatureRegionalPreference
 import com.viktormykhailiv.kmp.health.units.BloodGlucose
 import com.viktormykhailiv.kmp.health.units.celsius
+import com.viktormykhailiv.kmp.health.units.kilocalories
 import com.viktormykhailiv.kmp.health.units.kilograms
 import com.viktormykhailiv.kmp.health.units.meters
 import com.viktormykhailiv.kmp.health.units.millimetersOfMercury
@@ -30,13 +35,14 @@ import com.viktormykhailiv.kmp.health.units.percent
 import com.viktormykhailiv.kmp.health.units.watts
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 import androidx.health.connect.client.records.BloodGlucoseRecord as HCBloodGlucoseRecord
 import androidx.health.connect.client.records.BloodPressureRecord as HCBloodPressureRecord
 import androidx.health.connect.client.records.BodyFatRecord as HCBodyFatRecord
 import androidx.health.connect.client.records.BodyTemperatureRecord as HCBodyTemperatureRecord
 import androidx.health.connect.client.records.CyclingPedalingCadenceRecord as HCPedalingCadenceRecord
+import androidx.health.connect.client.records.DistanceRecord as HCDistanceRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord as HCExerciseSessionRecord
 import androidx.health.connect.client.records.HeartRateRecord as HCHeartRateRecord
 import androidx.health.connect.client.records.HeightRecord as HCHeightRecord
@@ -48,6 +54,7 @@ import androidx.health.connect.client.records.PowerRecord as HCPowerRecord
 import androidx.health.connect.client.records.SexualActivityRecord as HCSexualActivityRecord
 import androidx.health.connect.client.records.SleepSessionRecord as HCSleepSessionRecord
 import androidx.health.connect.client.records.StepsRecord as HCStepsRecord
+import androidx.health.connect.client.records.TotalCaloriesBurnedRecord as HCTotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.WeightRecord as HCWeightRecord
 
 class MappingTest {
@@ -58,6 +65,21 @@ class MappingTest {
     private val metadata = Metadata.unknownRecordingMethod()
 
     private val tempPreference = { TemperatureRegionalPreference.Celsius }
+
+    @Test
+    fun activeEnergyBurnedMapping() {
+        val common = ActiveEnergyBurnedRecord(
+            startTime = startTime,
+            endTime = endTime,
+            energy = 100.kilocalories,
+            metadata = metadata
+        )
+        val hc = common.toHCRecord(tempPreference) as HCTotalCaloriesBurnedRecord
+        assertEquals(100.0, hc.energy.inKilocalories)
+
+        val mappedBack = hc.toHealthRecord(tempPreference) as ActiveEnergyBurnedRecord
+        assertEquals(common.energy, mappedBack.energy)
+    }
 
     @Test
     fun bloodGlucoseMapping() {
@@ -118,7 +140,40 @@ class MappingTest {
         assertEquals(36.6, hc.temperature.inCelsius)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as BodyTemperatureRecord
-        assertEquals(common.temperature.inCelsius, mappedBack.temperature.inCelsius, 0.1)
+        assertEquals(common.temperature, mappedBack.temperature)
+        assertEquals(common.measurementLocation, mappedBack.measurementLocation)
+    }
+
+    @Test
+    fun cyclingPedalingCadenceMapping() {
+        val common = CyclingPedalingCadenceRecord(
+            startTime = startTime,
+            endTime = endTime,
+            samples = listOf(
+                CyclingPedalingCadenceRecord.Sample(time = startTime, revolutionsPerMinute = 90.0)
+            ),
+            metadata = metadata
+        )
+        val hc = common.toHCRecord(tempPreference) as HCPedalingCadenceRecord
+        assertEquals(90.0, hc.samples.first().revolutionsPerMinute)
+
+        val mappedBack = hc.toHealthRecord(tempPreference) as CyclingPedalingCadenceRecord
+        assertEquals(common.samples, mappedBack.samples)
+    }
+
+    @Test
+    fun distanceMapping() {
+        val common = DistanceRecord(
+            startTime = startTime,
+            endTime = endTime,
+            distance = 100.meters,
+            metadata = metadata
+        )
+        val hc = common.toHCRecord(tempPreference) as HCDistanceRecord
+        assertEquals(100.0, hc.distance.inMeters)
+
+        val mappedBack = hc.toHealthRecord(tempPreference) as DistanceRecord
+        assertEquals(common.distance, mappedBack.distance)
     }
 
     @Test
@@ -127,37 +182,49 @@ class MappingTest {
             startTime = startTime,
             endTime = endTime,
             exerciseType = ExerciseType.Running,
-            title = "Morning Run",
-            notes = "Feeling good",
-            exerciseRoute = null,
-            metadata = metadata
+            metadata = metadata,
+            segments = listOf(
+                ExerciseSegment(
+                    startTime = startTime,
+                    endTime = endTime,
+                    segmentType = ExerciseSegment.Type.Running
+                )
+            ),
+            laps = listOf(
+                ExerciseLap(
+                    startTime = startTime,
+                    endTime = endTime,
+                    length = 100.meters
+                )
+            ),
+            totalDistance = null,
+            totalEnergyBurned = null,
+            exerciseRoute = null
         )
         val hc = common.toHCRecord(tempPreference) as HCExerciseSessionRecord
-        assertEquals(HCExerciseSessionRecord.EXERCISE_TYPE_RUNNING, hc.exerciseType)
-        assertEquals("Morning Run", hc.title)
+        assertEquals(startTime.toJavaInstant(), hc.startTime)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as ExerciseSessionRecord
         assertEquals(common.exerciseType, mappedBack.exerciseType)
-        assertEquals(common.title, mappedBack.title)
+        assertEquals(common.segments, mappedBack.segments)
+        assertEquals(common.laps, mappedBack.laps)
+        assertEquals(common.totalDistance, mappedBack.totalDistance)
+        assertEquals(common.totalEnergyBurned, mappedBack.totalEnergyBurned)
     }
 
     @Test
     fun heartRateMapping() {
-        val samples = listOf(HeartRateRecord.Sample(time = time, beatsPerMinute = 70))
         val common = HeartRateRecord(
             startTime = startTime,
             endTime = endTime,
-            samples = samples,
+            samples = listOf(HeartRateRecord.Sample(time = startTime, beatsPerMinute = 70)),
             metadata = metadata
         )
         val hc = common.toHCRecord(tempPreference) as HCHeartRateRecord
         assertEquals(70, hc.samples.first().beatsPerMinute)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as HeartRateRecord
-        assertEquals(
-            common.samples.first().beatsPerMinute,
-            mappedBack.samples.first().beatsPerMinute
-        )
+        assertEquals(common.samples, mappedBack.samples)
     }
 
     @Test
@@ -172,9 +239,9 @@ class MappingTest {
 
     @Test
     fun leanBodyMassMapping() {
-        val common = LeanBodyMassRecord(time = time, mass = 60.kilograms, metadata = metadata)
+        val common = LeanBodyMassRecord(time = time, mass = 70.kilograms, metadata = metadata)
         val hc = common.toHCRecord(tempPreference) as HCLeanBodyMassRecord
-        assertEquals(60.0, hc.mass.inKilograms)
+        assertEquals(70.0, hc.mass.inKilograms)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as LeanBodyMassRecord
         assertEquals(common.mass, mappedBack.mass)
@@ -188,7 +255,10 @@ class MappingTest {
             metadata = metadata
         )
         val hc = common.toHCRecord(tempPreference) as HCMenstruationFlowRecord
-        assertEquals(HCMenstruationFlowRecord.FLOW_MEDIUM, hc.flow)
+        assertEquals(
+            HCMenstruationFlowRecord.FLOW_MEDIUM,
+            hc.flow
+        )
 
         val mappedBack = hc.toHealthRecord(tempPreference) as MenstruationFlowRecord
         assertEquals(common.flow, mappedBack.flow)
@@ -196,9 +266,13 @@ class MappingTest {
 
     @Test
     fun menstruationPeriodMapping() {
-        val common =
-            MenstruationPeriodRecord(startTime = startTime, endTime = endTime, metadata = metadata)
+        val common = MenstruationPeriodRecord(
+            startTime = startTime,
+            endTime = endTime,
+            metadata = metadata
+        )
         val hc = common.toHCRecord(tempPreference) as HCMenstruationPeriodRecord
+        assertEquals(startTime.toJavaInstant(), hc.startTime)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as MenstruationPeriodRecord
         assertEquals(common.startTime, mappedBack.startTime)
@@ -220,6 +294,21 @@ class MappingTest {
     }
 
     @Test
+    fun powerMapping() {
+        val common = PowerRecord(
+            startTime = startTime,
+            endTime = endTime,
+            samples = listOf(PowerRecord.Sample(time = startTime, power = 200.watts)),
+            metadata = metadata
+        )
+        val hc = common.toHCRecord(tempPreference) as HCPowerRecord
+        assertEquals(200.0, hc.samples.first().power.inWatts)
+
+        val mappedBack = hc.toHealthRecord(tempPreference) as PowerRecord
+        assertEquals(common.samples, mappedBack.samples)
+    }
+
+    @Test
     fun sexualActivityMapping() {
         val common = SexualActivityRecord(
             time = time,
@@ -235,32 +324,32 @@ class MappingTest {
 
     @Test
     fun sleepSessionMapping() {
-        val stages = listOf(
-            SleepSessionRecord.Stage(
-                startTime = startTime,
-                endTime = endTime,
-                type = SleepStageType.Deep
-            )
-        )
         val common = SleepSessionRecord(
             startTime = startTime,
             endTime = endTime,
-            stages = stages,
-            metadata = metadata
+            metadata = metadata,
+            stages = listOf(
+                SleepSessionRecord.Stage(
+                    startTime = startTime,
+                    endTime = endTime,
+                    type = SleepStageType.Deep
+                )
+            )
         )
         val hc = common.toHCRecord(tempPreference) as HCSleepSessionRecord
-        assertEquals(HCSleepSessionRecord.STAGE_TYPE_DEEP, hc.stages.first().stage)
+        assertEquals(startTime.toJavaInstant(), hc.startTime)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as SleepSessionRecord
-        assertEquals(common.stages.first().type, mappedBack.stages.first().type)
+        assertEquals(common.startTime, mappedBack.startTime)
+        assertEquals(common.endTime, mappedBack.endTime)
+        assertEquals(common.stages, mappedBack.stages)
     }
 
     @Test
     fun stepsMapping() {
-        val common =
-            StepsRecord(startTime = startTime, endTime = endTime, count = 100, metadata = metadata)
+        val common = StepsRecord(startTime = startTime, endTime = endTime, count = 1000, metadata = metadata)
         val hc = common.toHCRecord(tempPreference) as HCStepsRecord
-        assertEquals(100, hc.count)
+        assertEquals(1000, hc.count)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as StepsRecord
         assertEquals(common.count, mappedBack.count)
@@ -268,47 +357,11 @@ class MappingTest {
 
     @Test
     fun weightMapping() {
-        val common = WeightRecord(time = time, weight = 70.kilograms, metadata = metadata)
+        val common = WeightRecord(time = time, weight = 80.kilograms, metadata = metadata)
         val hc = common.toHCRecord(tempPreference) as HCWeightRecord
-        assertEquals(70.0, hc.weight.inKilograms)
+        assertEquals(80.0, hc.weight.inKilograms)
 
         val mappedBack = hc.toHealthRecord(tempPreference) as WeightRecord
         assertEquals(common.weight, mappedBack.weight)
-    }
-
-    @Test
-    fun powerMapping() {
-        val samples = listOf(PowerRecord.Sample(time = time, power = 200.watts))
-        val common = PowerRecord(
-            startTime = startTime,
-            endTime = endTime,
-            samples = samples,
-            metadata = metadata
-        )
-        val hc = common.toHCRecord(tempPreference) as HCPowerRecord
-        assertEquals(200.0, hc.samples.first().power.inWatts)
-
-        val mappedBack = hc.toHealthRecord(tempPreference) as PowerRecord
-        assertEquals(common.samples.first().power, mappedBack.samples.first().power)
-    }
-
-    @Test
-    fun cyclingPedalingCadenceMapping() {
-        val samples =
-            listOf(CyclingPedalingCadenceRecord.Sample(time = time, revolutionsPerMinute = 90.0))
-        val common = CyclingPedalingCadenceRecord(
-            startTime = startTime,
-            endTime = endTime,
-            samples = samples,
-            metadata = metadata
-        )
-        val hc = common.toHCRecord(tempPreference) as HCPedalingCadenceRecord
-        assertEquals(90.0, hc.samples.first().revolutionsPerMinute)
-
-        val mappedBack = hc.toHealthRecord(tempPreference) as CyclingPedalingCadenceRecord
-        assertEquals(
-            common.samples.first().revolutionsPerMinute,
-            mappedBack.samples.first().revolutionsPerMinute
-        )
     }
 }

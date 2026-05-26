@@ -1,6 +1,8 @@
 package com.viktormykhailiv.kmp.health
 
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodGlucose
+import com.viktormykhailiv.kmp.health.HealthDataType.Distance
+import com.viktormykhailiv.kmp.health.HealthDataType.ActiveEnergyBurned
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
@@ -45,6 +47,9 @@ import platform.HealthKit.HKSampleType
 import platform.HealthKit.HKSeriesType
 
 internal fun HealthDataType.toHKSampleType(): List<HKSampleType?> = when (this) {
+    ActiveEnergyBurned ->
+        listOf(HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierActiveEnergyBurned))
+
     BloodGlucose ->
         listOf(HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose))
 
@@ -62,6 +67,11 @@ internal fun HealthDataType.toHKSampleType(): List<HKSampleType?> = when (this) 
 
     CyclingPedalingCadence ->
         listOf(HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierCyclingCadence))
+
+    Distance ->
+        listOf(
+            HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierDistanceWalkingRunning),
+        )
 
     is Exercise -> {
         buildList {

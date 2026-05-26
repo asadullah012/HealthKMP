@@ -24,11 +24,13 @@ Note that for Android, the target device **needs** to have [Google Fit](https://
 
 ## Supported data types (iOS, watchOS, Android)
 
+- Active energy burned
 - Blood glucose
 - Blood pressure
 - Body fat
 - Body temperature
 - Cycling pedaling cadence
+- Distance
 - Exercise (segments, laps, routes)
 - Heart rate
 - Height
@@ -90,7 +92,7 @@ build.gradle:
 sourceSets {
     val commonMain by getting {
         dependencies {
-            implementation("com.viktormykhailiv:health-kmp:1.3.1")
+            implementation("com.viktormykhailiv:health-kmp:1.4.0")
         }
     }
 }
@@ -100,7 +102,7 @@ or use version catalog:
 
 ```
 [versions]
-health = "1.3.1"
+health = "1.4.0"
 
 [libraries]
 health = { module = "com.viktormykhailiv:health-kmp", version.ref = "health" }

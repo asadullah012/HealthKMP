@@ -40,7 +40,47 @@
 - **Build System:** If modifying the build configuration, be mindful of the custom XCFramework setup for Apple platforms and the specific dependencies for Android Health Connect/Google Fit.
 - **Testing Requirements:** Every feature or bug fix must include tests. Use `./gradlew :health:allTests` to verify changes across all supported platforms.
 
-## 6. Documentation
-- **KDoc Requirement:** All public interfaces, classes, and methods in the `health` module must have KDoc documentation.
-- **Content:** KDoc should explain the purpose, parameters, and return values of the component. For `HealthDataType` and `HealthRecord`, include unit information and valid ranges if applicable.
-- **Multiplatform Clarity:** When documenting platform-specific implementations (e.g., `HealthConnectManager`, `HealthKitManager`), clearly state the underlying platform API being used.
+## 7. Building and Verification
+### 7.1. API Stability
+The project uses the **Binary Compatibility Validator**. When public API changes are made (e.g., adding new members to `HealthDataType` or new records), you MUST update the API dump:
+```bash
+./gradlew :health:apiDump
+```
+Ensure the generated `.api` files are committed.
+
+### 7.2. Running Tests
+Verify changes across all platforms using the following commands:
+- **Android Unit Tests:** `./gradlew :health:testAndroid`
+- **Android Mapping (Host) Tests:** `./gradlew :health:testAndroidHostTest`
+- **Apple (iOS/watchOS) Tests:** `./gradlew :health:iosX64Test` (runs on macOS host)
+- **All Tests:** `./gradlew :health:allTests`
+
+### 7.3. Xcode Framework Assembly
+To verify that the Swift framework builds correctly and to update it for sample apps, use:
+```bash
+./gradlew :health:linkDebugFrameworkIosX64 :health:linkDebugFrameworkWatchosArm64
+```
+
+### 7.4. Sample App Verification
+- **Android/Compose:** Build and run via Android Studio or `./gradlew :sample:androidApp:installDebug`.
+- **Apple (macOS with Xcode):** 
+  ```bash
+  # Build for simulator with ad-hoc signing to embed entitlements
+  xcodebuild build -project sample/appleApps/appleApps.xcodeproj -scheme watchosApp -destination 'id=<SIMULATOR_ID>' CODE_SIGN_IDENTITY="-"
+  
+  # Install and launch
+  xcrun simctl install <SIMULATOR_ID> <PATH_TO_APP>
+  xcrun simctl launch <SIMULATOR_ID> <BUNDLE_ID>
+  ```
+
+### 7.5. Releasing
+To prepare a new release:
+1. Update `CHANGELOG.md` with the new version and changes.
+2. Update `VERSION_NAME` in `gradle.properties`.
+3. Update version references in `README.md` if necessary.
+4. Run all tests and update the API dump (`./gradlew :health:allTests :health:apiDump`).
+5. Commit changes with message "Release X.Y.Z".
+6. Push changes: `git push`.
+7. The `publish.yml` workflow will automatically publish the release to Maven Central, create tag and Github release.
+
+

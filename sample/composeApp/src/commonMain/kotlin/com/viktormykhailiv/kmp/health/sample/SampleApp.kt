@@ -28,15 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.viktormykhailiv.kmp.health.HealthDataType.ActiveEnergyBurned
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodGlucose
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
+import com.viktormykhailiv.kmp.health.HealthDataType.CyclingPedalingCadence
+import com.viktormykhailiv.kmp.health.HealthDataType.Distance
 import com.viktormykhailiv.kmp.health.HealthDataType.Exercise
 import com.viktormykhailiv.kmp.health.HealthDataType.HeartRate
 import com.viktormykhailiv.kmp.health.HealthDataType.Height
 import com.viktormykhailiv.kmp.health.HealthDataType.LeanBodyMass
-import com.viktormykhailiv.kmp.health.HealthDataType.CyclingPedalingCadence
 import com.viktormykhailiv.kmp.health.HealthDataType.MenstruationFlow
 import com.viktormykhailiv.kmp.health.HealthDataType.MenstruationPeriod
 import com.viktormykhailiv.kmp.health.HealthDataType.OvulationTest
@@ -46,11 +48,13 @@ import com.viktormykhailiv.kmp.health.HealthDataType.Sleep
 import com.viktormykhailiv.kmp.health.HealthDataType.Steps
 import com.viktormykhailiv.kmp.health.HealthDataType.Weight
 import com.viktormykhailiv.kmp.health.HealthManagerFactory
+import com.viktormykhailiv.kmp.health.sample.dataType.ActiveEnergyBurnedScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.BloodGlucoseScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.BloodPressureScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.BodyFatScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.BodyTemperatureScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.CyclingPedalingCadenceScreen
+import com.viktormykhailiv.kmp.health.sample.dataType.DistanceScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.ExerciseScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.HeartRateScreen
 import com.viktormykhailiv.kmp.health.sample.dataType.HeightScreen
@@ -77,11 +81,13 @@ fun SampleApp() {
 
     val readTypes = remember {
         listOf(
+            ActiveEnergyBurned,
             BloodGlucose,
             BloodPressure,
             BodyFat,
             BodyTemperature,
             CyclingPedalingCadence,
+            Distance,
             Exercise(),
             HeartRate,
             Height,
@@ -98,11 +104,13 @@ fun SampleApp() {
     }
     val writeTypes = remember {
         listOf(
+            ActiveEnergyBurned,
             BloodGlucose,
             BloodPressure,
             BodyFat,
             BodyTemperature,
             CyclingPedalingCadence,
+            Distance,
             Exercise(),
             HeartRate,
             Height,
@@ -246,11 +254,13 @@ fun SampleApp() {
                                     verticalArrangement = Arrangement.spacedBy(16.dp),
                                 ) {
                                     mapOf(
+                                        "Active energy burned" to NavDestinations.ActiveEnergyBurned,
                                         "Blood glucose" to NavDestinations.BloodGlucose,
                                         "Blood pressure" to NavDestinations.BloodPressure,
                                         "Body fat" to NavDestinations.BodyFat,
                                         "Body temperature" to NavDestinations.BodyTemperature,
                                         "Cycling pedaling cadence" to NavDestinations.CyclingPedalingCadence,
+                                        "Distance" to NavDestinations.Distance,
                                         "Exercise" to NavDestinations.Exercise,
                                         "Heart rate" to NavDestinations.HeartRate,
                                         "Height" to NavDestinations.Height,
@@ -275,11 +285,13 @@ fun SampleApp() {
                     }
                 }
 
+                composable<NavDestinations.ActiveEnergyBurned> { ActiveEnergyBurnedScreen() }
                 composable<NavDestinations.BloodGlucose> { BloodGlucoseScreen() }
                 composable<NavDestinations.BloodPressure> { BloodPressureScreen() }
                 composable<NavDestinations.BodyFat> { BodyFatScreen() }
                 composable<NavDestinations.BodyTemperature> { BodyTemperatureScreen() }
                 composable<NavDestinations.CyclingPedalingCadence> { CyclingPedalingCadenceScreen() }
+                composable<NavDestinations.Distance> { DistanceScreen() }
                 composable<NavDestinations.Exercise> { ExerciseScreen() }
                 composable<NavDestinations.HeartRate> { HeartRateScreen() }
                 composable<NavDestinations.Height> { HeightScreen() }

@@ -7,36 +7,32 @@ import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
 import com.viktormykhailiv.kmp.health.HealthDataType.CyclingPedalingCadence
-import com.viktormykhailiv.kmp.health.HealthDataType.Exercise
 import com.viktormykhailiv.kmp.health.HealthDataType.HeartRate
 import com.viktormykhailiv.kmp.health.HealthDataType.Height
 import com.viktormykhailiv.kmp.health.HealthDataType.LeanBodyMass
+import com.viktormykhailiv.kmp.health.HealthDataType.Power
+import com.viktormykhailiv.kmp.health.HealthDataType.Sleep
+import com.viktormykhailiv.kmp.health.HealthDataType.Weight
 import com.viktormykhailiv.kmp.health.HealthDataType.MenstruationFlow
 import com.viktormykhailiv.kmp.health.HealthDataType.MenstruationPeriod
 import com.viktormykhailiv.kmp.health.HealthDataType.OvulationTest
-import com.viktormykhailiv.kmp.health.HealthDataType.Power
 import com.viktormykhailiv.kmp.health.HealthDataType.SexualActivity
-import com.viktormykhailiv.kmp.health.HealthDataType.Sleep
-import com.viktormykhailiv.kmp.health.HealthDataType.Steps
-import com.viktormykhailiv.kmp.health.HealthDataType.Weight
 import com.viktormykhailiv.kmp.health.aggregate.BloodGlucoseAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.BloodPressureAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.BodyFatAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.BodyTemperatureAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.CyclingPedalingCadenceAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.HeartRateAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.HeightAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.LeanBodyMassAggregatedRecord
-import com.viktormykhailiv.kmp.health.aggregate.CyclingPedalingCadenceAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.PowerAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.SleepAggregatedRecord
-import com.viktormykhailiv.kmp.health.aggregate.StepsAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.WeightAggregatedRecord
 import com.viktormykhailiv.kmp.health.records.BloodGlucoseRecord
 import com.viktormykhailiv.kmp.health.records.BloodPressureRecord
 import com.viktormykhailiv.kmp.health.records.BodyFatRecord
 import com.viktormykhailiv.kmp.health.records.BodyTemperatureRecord
 import com.viktormykhailiv.kmp.health.records.CyclingPedalingCadenceRecord
-import com.viktormykhailiv.kmp.health.records.ExerciseSessionRecord
 import com.viktormykhailiv.kmp.health.records.HeartRateRecord
 import com.viktormykhailiv.kmp.health.records.HeightRecord
 import com.viktormykhailiv.kmp.health.records.LeanBodyMassRecord
@@ -46,7 +42,6 @@ import com.viktormykhailiv.kmp.health.records.OvulationTestRecord
 import com.viktormykhailiv.kmp.health.records.PowerRecord
 import com.viktormykhailiv.kmp.health.records.SexualActivityRecord
 import com.viktormykhailiv.kmp.health.records.SleepSessionRecord
-import com.viktormykhailiv.kmp.health.records.StepsRecord
 import com.viktormykhailiv.kmp.health.records.WeightRecord
 import kotlin.time.Instant
 import kotlinx.datetime.toNSDate
@@ -120,19 +115,7 @@ suspend fun SwiftHealthManager.readCyclingPedalingCadence(
     ).filterIsInstance<CyclingPedalingCadenceRecord>()
 
 @Throws(Throwable::class)
-suspend fun SwiftHealthManager.readExercise(
-    startTime: NSDate,
-    endTime: NSDate,
-    exercise: Exercise = Exercise(),
-): List<ExerciseSessionRecord> =
-    readData(
-        startTime = startTime,
-        endTime = endTime,
-        type = exercise,
-    ).filterIsInstance<ExerciseSessionRecord>()
-
-@Throws(Throwable::class)
-suspend fun SwiftHealthManager.readHeartRage(
+suspend fun SwiftHealthManager.readHeartRate(
     startTime: NSDate,
     endTime: NSDate,
 ): List<HeartRateRecord> =
@@ -229,17 +212,6 @@ suspend fun SwiftHealthManager.readSleep(
         endTime = endTime,
         type = Sleep,
     ).filterIsInstance<SleepSessionRecord>()
-
-@Throws(Throwable::class)
-suspend fun SwiftHealthManager.readSteps(
-    startTime: NSDate,
-    endTime: NSDate,
-): List<StepsRecord> =
-    readData(
-        startTime = startTime,
-        endTime = endTime,
-        type = Steps,
-    ).filterIsInstance<StepsRecord>()
 
 @Throws(Throwable::class)
 suspend fun SwiftHealthManager.readWeight(
@@ -363,17 +335,6 @@ suspend fun SwiftHealthManager.aggregateSleep(
         endTime = endTime,
         type = Sleep,
     ) as SleepAggregatedRecord
-
-@Throws(Throwable::class)
-suspend fun SwiftHealthManager.aggregateSteps(
-    startTime: NSDate,
-    endTime: NSDate,
-): StepsAggregatedRecord =
-    aggregate(
-        startTime = startTime,
-        endTime = endTime,
-        type = Steps,
-    ) as StepsAggregatedRecord
 
 @Throws(Throwable::class)
 suspend fun SwiftHealthManager.aggregateWeight(

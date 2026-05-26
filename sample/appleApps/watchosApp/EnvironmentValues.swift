@@ -5,9 +5,11 @@ extension EnvironmentValues {
     @Entry var healthManager: SwiftHealthManager = SwiftHealthManager(manager: HealthManagerFactory().createManager())
     
     @Entry var readTypes: [HealthDataType] = [
+        HealthDataTypeActiveEnergyBurned(),
         HealthDataTypeBloodGlucose(),
         HealthDataTypeBloodPressure(),
         HealthDataTypeBodyTemperature(),
+        HealthDataTypeDistance(),
         HealthDataTypeExercise(),
         HealthDataTypeHeartRate(),
         HealthDataTypeHeight(),
@@ -16,9 +18,11 @@ extension EnvironmentValues {
         HealthDataTypeWeight(),
     ]
     @Entry var writeTypes: [HealthDataType] = [
+        HealthDataTypeActiveEnergyBurned(),
         HealthDataTypeBloodGlucose(),
         HealthDataTypeBloodPressure(),
         HealthDataTypeBodyTemperature(),
+        HealthDataTypeDistance(),
         HealthDataTypeExercise(),
         HealthDataTypeHeartRate(),
         HealthDataTypeHeight(),

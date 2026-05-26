@@ -4,8 +4,6 @@ import HealthKMP
 struct BloodGlucoseView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
     @State private var bloodGlucoseAvg: BloodGlucose? = nil
@@ -68,10 +66,12 @@ struct BloodGlucoseView : View {
         Task {
             isLoading = true
             do {
-                let aggregatedBloodGlucose = try await health.aggregateBloodGlucose(
-                    startTime: Calendar.current.date(byAdding: .month, value: -3, to: Date.now)!,
+                let aggregated = try await health.aggregate(
+                    startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
+                    type: HealthDataTypeBloodGlucose()
                 )
+                let aggregatedBloodGlucose = aggregated as! BloodGlucoseAggregatedRecord
                 bloodGlucoseAvg = aggregatedBloodGlucose.avg
                 bloodGlucoseMin = aggregatedBloodGlucose.min
                 bloodGlucoseMax = aggregatedBloodGlucose.max

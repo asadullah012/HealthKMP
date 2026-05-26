@@ -4,8 +4,6 @@ import HealthKMP
 struct WeightView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
     @State private var weightAvg: Mass? = nil
@@ -68,10 +66,12 @@ struct WeightView : View {
         Task {
             isLoading = true
             do {
-                let aggregatedWeight = try await health.aggregateWeight(
-                    startTime: Calendar.current.date(byAdding: .month, value: -1, to: Date.now)!,
+                let aggregated = try await health.aggregate(
+                    startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
+                    type: HealthDataTypeWeight()
                 )
+                let aggregatedWeight = aggregated as! WeightAggregatedRecord
                 weightAvg = aggregatedWeight.avg
                 weightMin = aggregatedWeight.min
                 weightMax = aggregatedWeight.max

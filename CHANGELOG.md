@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/vitoksmile/HealthKMP/releases/tag/1.4.0)
+
+- Added **active energy burned** data type
+- Added **distance** data type
+- Fix **menstrual flow** mapping on iOS
+- Fix **body fat** percentage scaling on iOS
+
 ## [1.3.1](https://github.com/vitoksmile/HealthKMP/releases/tag/1.3.1)
 
 - Fix iOS HealthKit Metadata (Device Info) (#11)

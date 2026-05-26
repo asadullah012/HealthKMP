@@ -3,6 +3,8 @@
 package com.viktormykhailiv.kmp.health
 
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodGlucose
+import com.viktormykhailiv.kmp.health.HealthDataType.Distance
+import com.viktormykhailiv.kmp.health.HealthDataType.ActiveEnergyBurned
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
@@ -27,6 +29,8 @@ import com.viktormykhailiv.kmp.health.aggregate.HeartRateAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.HeightAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.LeanBodyMassAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.CyclingPedalingCadenceAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.DistanceAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.ActiveEnergyBurnedAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.PowerAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.SleepAggregatedRecord
 import com.viktormykhailiv.kmp.health.aggregate.StepsAggregatedRecord
@@ -36,6 +40,8 @@ import com.viktormykhailiv.kmp.health.records.BloodPressureRecord
 import com.viktormykhailiv.kmp.health.records.BodyFatRecord
 import com.viktormykhailiv.kmp.health.records.BodyTemperatureRecord
 import com.viktormykhailiv.kmp.health.records.CyclingPedalingCadenceRecord
+import com.viktormykhailiv.kmp.health.records.DistanceRecord
+import com.viktormykhailiv.kmp.health.records.ActiveEnergyBurnedRecord
 import com.viktormykhailiv.kmp.health.records.ExerciseSessionRecord
 import com.viktormykhailiv.kmp.health.records.HeartRateRecord
 import com.viktormykhailiv.kmp.health.records.HeightRecord
@@ -72,6 +78,23 @@ val IntervalRecord.duration: Duration
     get() = endTime - startTime
 
 // region Read extensions
+/**
+ * Reads [ActiveEnergyBurnedRecord]s within the specified time range.
+ *
+ * @param startTime The start time of the range (inclusive).
+ * @param endTime The end time of the range (exclusive).
+ * @return A [Result] containing a list of [ActiveEnergyBurnedRecord]s.
+ */
+suspend fun HealthManager.readActiveEnergyBurned(
+    startTime: Instant,
+    endTime: Instant,
+): Result<List<ActiveEnergyBurnedRecord>> =
+    readData(
+        startTime = startTime,
+        endTime = endTime,
+        type = ActiveEnergyBurned,
+    ).map { it.filterIsInstance<ActiveEnergyBurnedRecord>() }
+
 /**
  * Reads [BloodGlucoseRecord]s within the specified time range.
  *
@@ -156,6 +179,23 @@ suspend fun HealthManager.readCyclingPedalingCadence(
         endTime = endTime,
         type = CyclingPedalingCadence,
     ).map { it.filterIsInstance<CyclingPedalingCadenceRecord>() }
+
+/**
+ * Reads [DistanceRecord]s within the specified time range.
+ *
+ * @param startTime The start time of the range (inclusive).
+ * @param endTime The end time of the range (exclusive).
+ * @return A [Result] containing a list of [DistanceRecord]s.
+ */
+suspend fun HealthManager.readDistance(
+    startTime: Instant,
+    endTime: Instant,
+): Result<List<DistanceRecord>> =
+    readData(
+        startTime = startTime,
+        endTime = endTime,
+        type = Distance,
+    ).map { it.filterIsInstance<DistanceRecord>() }
 
 /**
  * Reads [ExerciseSessionRecord]s within the specified time range.
@@ -366,6 +406,23 @@ suspend fun HealthManager.readWeight(
 
 // region Aggregate extensions
 /**
+ * Aggregates [ActiveEnergyBurnedRecord]s within the specified time range.
+ *
+ * @param startTime The start time of the range (inclusive).
+ * @param endTime The end time of the range (exclusive).
+ * @return A [Result] containing a [ActiveEnergyBurnedAggregatedRecord].
+ */
+suspend fun HealthManager.aggregateActiveEnergyBurned(
+    startTime: Instant,
+    endTime: Instant,
+): Result<ActiveEnergyBurnedAggregatedRecord> =
+    aggregate(
+        startTime = startTime,
+        endTime = endTime,
+        type = ActiveEnergyBurned,
+    ).map { it as ActiveEnergyBurnedAggregatedRecord }
+
+/**
  * Aggregates [BloodGlucoseRecord]s within the specified time range.
  *
  * @param startTime The start time of the range (inclusive).
@@ -380,7 +437,7 @@ suspend fun HealthManager.aggregateBloodGlucose(
         startTime = startTime,
         endTime = endTime,
         type = BloodGlucose,
-    ).mapCatching { it as BloodGlucoseAggregatedRecord }
+    ).map { it as BloodGlucoseAggregatedRecord }
 
 /**
  * Aggregates [BloodPressureRecord]s within the specified time range.
@@ -449,6 +506,23 @@ suspend fun HealthManager.aggregateCyclingPedalingCadence(
         endTime = endTime,
         type = CyclingPedalingCadence,
     ).mapCatching { it as CyclingPedalingCadenceAggregatedRecord }
+
+/**
+ * Aggregates [DistanceRecord]s within the specified time range.
+ *
+ * @param startTime The start time of the range (inclusive).
+ * @param endTime The end time of the range (exclusive).
+ * @return A [Result] containing a [DistanceAggregatedRecord].
+ */
+suspend fun HealthManager.aggregateDistance(
+    startTime: Instant,
+    endTime: Instant,
+): Result<DistanceAggregatedRecord> =
+    aggregate(
+        startTime = startTime,
+        endTime = endTime,
+        type = Distance,
+    ).map { it as DistanceAggregatedRecord }
 
 /**
  * Aggregates [HeartRateRecord]s within the specified time range.

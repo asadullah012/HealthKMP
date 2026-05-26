@@ -4,8 +4,6 @@ import HealthKMP
 struct BloodPressureView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
     @State private var systolicAvg: Pressure? = nil
@@ -80,10 +78,12 @@ struct BloodPressureView : View {
         Task {
             isLoading = true
             do {
-                let aggregatedBloodPressure = try await health.aggregateBloodPressure(
-                    startTime: Calendar.current.date(byAdding: .year, value: -1, to: Date.now)!,
+                let aggregated = try await health.aggregate(
+                    startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
+                    type: HealthDataTypeBloodPressure()
                 )
+                let aggregatedBloodPressure = aggregated as! BloodPressureAggregatedRecord
                 systolicAvg = aggregatedBloodPressure.systolic.avg
                 systolicMin = aggregatedBloodPressure.systolic.min
                 systolicMax = aggregatedBloodPressure.systolic.max

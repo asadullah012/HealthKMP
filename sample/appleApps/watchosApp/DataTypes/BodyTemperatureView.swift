@@ -4,8 +4,6 @@ import HealthKMP
 struct BodyTemperatureView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
     @State private var temperatureAvg: Temperature? = nil
@@ -68,10 +66,12 @@ struct BodyTemperatureView : View {
         Task {
             isLoading = true
             do {
-                let aggregatedTemperature = try await health.aggregateBodyTemperature(
-                    startTime: Calendar.current.date(byAdding: .year, value: -1, to: Date.now)!,
+                let aggregated = try await health.aggregate(
+                    startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
+                    type: HealthDataTypeBodyTemperature()
                 )
+                let aggregatedTemperature = aggregated as! BodyTemperatureAggregatedRecord
                 temperatureAvg = aggregatedTemperature.avg
                 temperatureMin = aggregatedTemperature.min
                 temperatureMax = aggregatedTemperature.max

@@ -4,8 +4,6 @@ import HealthKMP
 struct HeartRateView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
     @State private var heartRateAvg: Int64 = 0
@@ -68,10 +66,12 @@ struct HeartRateView : View {
         Task {
             isLoading = true
             do {
-                let aggregatedHeartRate = try await health.aggregateHeartRate(
-                    startTime: Calendar.current.date(byAdding: .day, value: -14, to: Date.now)!,
+                let aggregated = try await health.aggregate(
+                    startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
+                    type: HealthDataTypeHeartRate()
                 )
+                let aggregatedHeartRate = aggregated as! HeartRateAggregatedRecord
                 heartRateAvg = aggregatedHeartRate.avg
                 heartRateMin = aggregatedHeartRate.min
                 heartRateMax = aggregatedHeartRate.max

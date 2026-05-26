@@ -4,8 +4,6 @@ import HealthKMP
 struct ExerciseView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
     @State private var exercises: [ExerciseModel] = []
@@ -80,11 +78,12 @@ struct ExerciseView : View {
         Task {
             isLoading = true
             do {
-                let records = try await health.readExercise(
+                let records = try await health.readData(
                     startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
+                    type: HealthDataTypeExercise()
                 )
-                exercises = records.map { ExerciseModel(type: $0.exerciseType) }
+                exercises = (records as! [ExerciseSessionRecord]).map { ExerciseModel(type: $0.exerciseType) }
             } catch {
                 readError = error.localizedDescription
             }

@@ -2,6 +2,13 @@
 
 package com.viktormykhailiv.kmp.health
 
+import com.viktormykhailiv.kmp.health.aggregate.ActiveEnergyBurnedAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.DistanceAggregatedRecord
+import com.viktormykhailiv.kmp.health.aggregate.StepsAggregatedRecord
+import com.viktormykhailiv.kmp.health.records.ActiveEnergyBurnedRecord
+import com.viktormykhailiv.kmp.health.records.DistanceRecord
+import com.viktormykhailiv.kmp.health.records.ExerciseSessionRecord
+import com.viktormykhailiv.kmp.health.records.StepsRecord
 import com.viktormykhailiv.kmp.health.region.RegionalPreferences
 import kotlinx.datetime.toKotlinInstant
 import platform.Foundation.NSDate
@@ -87,6 +94,90 @@ class SwiftHealthManager(
             endTime = endTime.toKotlinInstant(),
             type = type,
         ).getOrThrow()
+    }
+
+    @Throws(Throwable::class)
+    suspend fun readActiveEnergyBurned(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): List<ActiveEnergyBurnedRecord> {
+        return readData(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.ActiveEnergyBurned,
+        ).filterIsInstance<ActiveEnergyBurnedRecord>()
+    }
+
+    @Throws(Throwable::class)
+    suspend fun aggregateActiveEnergyBurned(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): ActiveEnergyBurnedAggregatedRecord {
+        return aggregate(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.ActiveEnergyBurned,
+        ) as ActiveEnergyBurnedAggregatedRecord
+    }
+
+    @Throws(Throwable::class)
+    suspend fun readDistance(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): List<DistanceRecord> {
+        return readData(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.Distance,
+        ).filterIsInstance<DistanceRecord>()
+    }
+
+    @Throws(Throwable::class)
+    suspend fun aggregateDistance(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): DistanceAggregatedRecord {
+        return aggregate(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.Distance,
+        ) as DistanceAggregatedRecord
+    }
+
+    @Throws(Throwable::class)
+    suspend fun readExercise(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): List<ExerciseSessionRecord> {
+        return readData(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.Exercise(),
+        ).filterIsInstance<ExerciseSessionRecord>()
+    }
+
+    @Throws(Throwable::class)
+    suspend fun readSteps(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): List<StepsRecord> {
+        return readData(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.Steps,
+        ).filterIsInstance<StepsRecord>()
+    }
+
+    @Throws(Throwable::class)
+    suspend fun aggregateSteps(
+        startTime: NSDate,
+        endTime: NSDate,
+    ): StepsAggregatedRecord {
+        return aggregate(
+            startTime = startTime,
+            endTime = endTime,
+            type = HealthDataType.Steps,
+        ) as StepsAggregatedRecord
     }
 
     @Throws(Throwable::class)

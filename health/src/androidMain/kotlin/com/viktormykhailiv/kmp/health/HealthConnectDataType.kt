@@ -6,6 +6,7 @@ import androidx.health.connect.client.records.BloodPressureRecord
 import androidx.health.connect.client.records.BodyFatRecord
 import androidx.health.connect.client.records.BodyTemperatureRecord
 import androidx.health.connect.client.records.CyclingPedalingCadenceRecord
+import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord
 import androidx.health.connect.client.records.HeartRateRecord
 import androidx.health.connect.client.records.HeightRecord
@@ -18,8 +19,11 @@ import androidx.health.connect.client.records.Record
 import androidx.health.connect.client.records.SexualActivityRecord
 import androidx.health.connect.client.records.SleepSessionRecord
 import androidx.health.connect.client.records.StepsRecord
+import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.WeightRecord
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodGlucose
+import com.viktormykhailiv.kmp.health.HealthDataType.Distance
+import com.viktormykhailiv.kmp.health.HealthDataType.ActiveEnergyBurned
 import com.viktormykhailiv.kmp.health.HealthDataType.BloodPressure
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyFat
 import com.viktormykhailiv.kmp.health.HealthDataType.BodyTemperature
@@ -39,6 +43,8 @@ import com.viktormykhailiv.kmp.health.HealthDataType.Weight
 import kotlin.reflect.KClass
 
 internal fun HealthDataType.toRecordType(): KClass<out Record> = when (this) {
+    ActiveEnergyBurned -> TotalCaloriesBurnedRecord::class
+
     BloodGlucose -> BloodGlucoseRecord::class
 
     BloodPressure -> BloodPressureRecord::class
@@ -48,6 +54,8 @@ internal fun HealthDataType.toRecordType(): KClass<out Record> = when (this) {
     BodyTemperature -> BodyTemperatureRecord::class
 
     CyclingPedalingCadence -> CyclingPedalingCadenceRecord::class
+
+    Distance -> DistanceRecord::class
 
     is Exercise -> ExerciseSessionRecord::class
 

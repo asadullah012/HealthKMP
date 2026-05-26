@@ -1,18 +1,16 @@
 import SwiftUI
 import HealthKMP
 
-struct StepsView : View {
+struct DistanceView : View {
     
     @Environment(\.healthManager) private var health
-    @Environment(\.readTypes) private var readTypes
-    @Environment(\.writeTypes) private var writeTypes
     
     @State private var isLoading: Bool = false
-    @State private var steps: Int64 = 0
+    @State private var distance: Double = 0.0
     @State private var readError: String? = nil
     
     @State private var isWriting: Bool = false
-    @State private var inputSteps: String = Int.random(in: 1..<100).formatted()
+    @State private var inputDistance: String = Double.random(in: 1..<1000).formatted()
     @State private var writeError: String? = nil
     
     var body: some View {
@@ -21,50 +19,47 @@ struct StepsView : View {
                 if (isLoading) {
                     ProgressView()
                 } else if (readError != nil) {
-                    Text("Failed to read steps: \(readError ?? "")")
+                    Text("Failed to read distance: \(readError ?? "")")
                         .foregroundColor(.red)
                 } else {
-                    Text("\(steps) steps for last 7 days")
+                    Text("\(distance.formatted()) m for last 7 days")
                 }
                 
-                Text("Write steps")
+                Text("Write distance")
                     .font(.caption)
-                TextField("Enter steps here...", text: $inputSteps)
+                TextField("Enter distance here...", text: $inputDistance)
                     .padding(.horizontal)
-                    .onChange(of: inputSteps) { oldValue, newValue in
-                        let filtered = newValue.filter { $0.isNumber }
-                        if filtered != newValue {
-                            self.inputSteps = filtered
-                        }
-                    }
+                
                 if (isWriting) {
                     ProgressView()
                 } else {
                     if (writeError != nil) {
-                        Text("Failed to write steps: \(writeError ?? "")")
+                        Text("Failed to write distance: \(writeError ?? "")")
                             .foregroundColor(.red)
                     }
                     
-                    Button("Write steps") {
-                        writeSteps()
+                    Button("Write distance") {
+                        writeDistance()
                     }
                 }
             }
         }
-        .navigationTitle("Steps")
+        .navigationTitle("Distance")
         .onAppear {
-            loadSteps()
+            loadDistance()
         }
     }
     
-    private func loadSteps() {
+    private func loadDistance() {
         Task {
             isLoading = true
             do {
-                steps = try await health.aggregateSteps(
+                let aggregated = try await health.aggregate(
                     startTime: Calendar.current.date(byAdding: .day, value: -7, to: Date.now)!,
                     endTime: Date.now,
-                ).count
+                    type: HealthDataTypeDistance()
+                )
+                distance = (aggregated as! DistanceAggregatedRecord).distance.inMeters
             } catch {
                 readError = error.localizedDescription
             }
@@ -72,10 +67,10 @@ struct StepsView : View {
         }
     }
     
-    private func writeSteps() {
-        let stepsCount = Int32(inputSteps)
-        if (stepsCount == nil) {
-            writeError = "Can't convert steps into Int32"
+    private func writeDistance() {
+        let distanceVal = Double(inputDistance)
+        if (distanceVal == nil) {
+            writeError = "Can't convert distance into Double"
             return
         }
         writeError = nil
@@ -83,14 +78,14 @@ struct StepsView : View {
         Task {
             isWriting = true
             do {
-                try await health.writeData(records: [StepsRecord(
-                    startTime: Date.now.toKotlinInstant(),
+                try await health.writeData(records: [DistanceRecord(
+                    startTime: Calendar.current.date(byAdding: .hour, value: -1, to: Date.now)!.toKotlinInstant(),
                     endTime: Date.now.toKotlinInstant(),
-                    count: stepsCount!,
+                    distance: LengthKt.meters(distanceVal!),
                     metadata: generateManualEntryMetadata(),
                 )])
-                inputSteps = ""
-                loadSteps()
+                inputDistance = ""
+                loadDistance()
             } catch {
                 writeError = error.localizedDescription
             }
@@ -100,5 +95,5 @@ struct StepsView : View {
 }
 
 #Preview {
-    StepsView()
+    DistanceView()
 }

@@ -2,9 +2,11 @@ import SwiftUI
 
 struct DataTypesView : View {
     
+    let navigateToActiveEnergyBurned: () -> Void
     let navigateToBloodGlucose: () -> Void
     let navigateToBloodPressure: () -> Void
     let navigateToBodyTemperature: () -> Void
+    let navigateToDistance: () -> Void
     let navigateToExercise: () -> Void
     let navigateToHeartRate: () -> Void
     let navigateToHeight: () -> Void
@@ -13,6 +15,10 @@ struct DataTypesView : View {
     let navigateToWeight: () -> Void
     
     var body: some View {
+        Button("Active energy burned") {
+            navigateToActiveEnergyBurned()
+        }
+        
         Button("Blood glucose") {
             navigateToBloodGlucose()
         }
@@ -23,6 +29,10 @@ struct DataTypesView : View {
         
         Button("Body temperature") {
             navigateToBodyTemperature()
+        }
+        
+        Button("Distance") {
+            navigateToDistance()
         }
         
         Button("Exercise") {
@@ -53,9 +63,11 @@ struct DataTypesView : View {
 
 #Preview {
     DataTypesView(
+        navigateToActiveEnergyBurned: {},
         navigateToBloodGlucose: {},
         navigateToBloodPressure: {},
         navigateToBodyTemperature: {},
+        navigateToDistance: {},
         navigateToExercise: {},
         navigateToHeartRate: {},
         navigateToHeight: {},

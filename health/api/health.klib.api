@@ -1,5 +1,5 @@
 // Klib ABI Dump
-// Targets: [iosArm64, iosSimulatorArm64, iosX64, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64, watchosX64]
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64]
 // Rendering settings:
 // - Signature version: 2
 // - Show manifest properties: true
@@ -576,6 +576,12 @@ sealed interface com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormy
         final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health/HealthDataType.Exercise.toString|toString(){}[0]
     }
 
+    final object ActiveEnergyBurned : com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormykhailiv.kmp.health/HealthDataType.ActiveEnergyBurned|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health/HealthDataType.ActiveEnergyBurned.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health/HealthDataType.ActiveEnergyBurned.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health/HealthDataType.ActiveEnergyBurned.toString|toString(){}[0]
+    }
+
     final object BloodGlucose : com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormykhailiv.kmp.health/HealthDataType.BloodGlucose|null[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health/HealthDataType.BloodGlucose.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health/HealthDataType.BloodGlucose.hashCode|hashCode(){}[0]
@@ -604,6 +610,12 @@ sealed interface com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormy
         final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health/HealthDataType.CyclingPedalingCadence.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health/HealthDataType.CyclingPedalingCadence.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health/HealthDataType.CyclingPedalingCadence.toString|toString(){}[0]
+    }
+
+    final object Distance : com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormykhailiv.kmp.health/HealthDataType.Distance|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health/HealthDataType.Distance.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health/HealthDataType.Distance.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health/HealthDataType.Distance.toString|toString(){}[0]
     }
 
     final object HeartRate : com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormykhailiv.kmp.health/HealthDataType.HeartRate|null[0]
@@ -671,6 +683,27 @@ sealed interface com.viktormykhailiv.kmp.health/HealthDataType { // com.viktormy
         final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health/HealthDataType.Weight.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health/HealthDataType.Weight.toString|toString(){}[0]
     }
+}
+
+final class com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord : com.viktormykhailiv.kmp.health/HealthAggregatedRecord { // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord|null[0]
+    constructor <init>(kotlin.time/Instant, kotlin.time/Instant, com.viktormykhailiv.kmp.health.units/Energy) // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.<init>|<init>(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Energy){}[0]
+
+    final val dataType // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.dataType|{}dataType[0]
+        final fun <get-dataType>(): com.viktormykhailiv.kmp.health/HealthDataType // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.dataType.<get-dataType>|<get-dataType>(){}[0]
+    final val endTime // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.endTime|{}endTime[0]
+        final fun <get-endTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.endTime.<get-endTime>|<get-endTime>(){}[0]
+    final val energy // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.energy|{}energy[0]
+        final fun <get-energy>(): com.viktormykhailiv.kmp.health.units/Energy // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.energy.<get-energy>|<get-energy>(){}[0]
+    final val startTime // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.startTime|{}startTime[0]
+        final fun <get-startTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.startTime.<get-startTime>|<get-startTime>(){}[0]
+
+    final fun component1(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.component1|component1(){}[0]
+    final fun component2(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.component2|component2(){}[0]
+    final fun component3(): com.viktormykhailiv.kmp.health.units/Energy // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.component3|component3(){}[0]
+    final fun copy(kotlin.time/Instant = ..., kotlin.time/Instant = ..., com.viktormykhailiv.kmp.health.units/Energy = ...): com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.copy|copy(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Energy){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord.toString|toString(){}[0]
 }
 
 final class com.viktormykhailiv.kmp.health.aggregate/BloodGlucoseAggregatedRecord : com.viktormykhailiv.kmp.health/HealthAggregatedRecord { // com.viktormykhailiv.kmp.health.aggregate/BloodGlucoseAggregatedRecord|null[0]
@@ -822,6 +855,27 @@ final class com.viktormykhailiv.kmp.health.aggregate/CyclingPedalingCadenceAggre
     final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health.aggregate/CyclingPedalingCadenceAggregatedRecord.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health.aggregate/CyclingPedalingCadenceAggregatedRecord.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health.aggregate/CyclingPedalingCadenceAggregatedRecord.toString|toString(){}[0]
+}
+
+final class com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord : com.viktormykhailiv.kmp.health/HealthAggregatedRecord { // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord|null[0]
+    constructor <init>(kotlin.time/Instant, kotlin.time/Instant, com.viktormykhailiv.kmp.health.units/Length) // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.<init>|<init>(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Length){}[0]
+
+    final val dataType // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.dataType|{}dataType[0]
+        final fun <get-dataType>(): com.viktormykhailiv.kmp.health/HealthDataType // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.dataType.<get-dataType>|<get-dataType>(){}[0]
+    final val distance // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.distance|{}distance[0]
+        final fun <get-distance>(): com.viktormykhailiv.kmp.health.units/Length // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.distance.<get-distance>|<get-distance>(){}[0]
+    final val endTime // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.endTime|{}endTime[0]
+        final fun <get-endTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.endTime.<get-endTime>|<get-endTime>(){}[0]
+    final val startTime // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.startTime|{}startTime[0]
+        final fun <get-startTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.startTime.<get-startTime>|<get-startTime>(){}[0]
+
+    final fun component1(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.component1|component1(){}[0]
+    final fun component2(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.component2|component2(){}[0]
+    final fun component3(): com.viktormykhailiv.kmp.health.units/Length // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.component3|component3(){}[0]
+    final fun copy(kotlin.time/Instant = ..., kotlin.time/Instant = ..., com.viktormykhailiv.kmp.health.units/Length = ...): com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.copy|copy(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Length){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord.toString|toString(){}[0]
 }
 
 final class com.viktormykhailiv.kmp.health.aggregate/HeartRateAggregatedRecord : com.viktormykhailiv.kmp.health/HealthAggregatedRecord { // com.viktormykhailiv.kmp.health.aggregate/HeartRateAggregatedRecord|null[0]
@@ -1064,6 +1118,30 @@ final class com.viktormykhailiv.kmp.health.records.metadata/Metadata { // com.vi
     }
 }
 
+final class com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord : com.viktormykhailiv.kmp.health/IntervalRecord { // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord|null[0]
+    constructor <init>(kotlin.time/Instant, kotlin.time/Instant, com.viktormykhailiv.kmp.health.units/Energy, com.viktormykhailiv.kmp.health.records.metadata/Metadata = ...) // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.<init>|<init>(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Energy;com.viktormykhailiv.kmp.health.records.metadata.Metadata){}[0]
+
+    final val dataType // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.dataType|{}dataType[0]
+        final fun <get-dataType>(): com.viktormykhailiv.kmp.health/HealthDataType // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.dataType.<get-dataType>|<get-dataType>(){}[0]
+    final val endTime // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.endTime|{}endTime[0]
+        final fun <get-endTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.endTime.<get-endTime>|<get-endTime>(){}[0]
+    final val energy // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.energy|{}energy[0]
+        final fun <get-energy>(): com.viktormykhailiv.kmp.health.units/Energy // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.energy.<get-energy>|<get-energy>(){}[0]
+    final val metadata // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.metadata|{}metadata[0]
+        final fun <get-metadata>(): com.viktormykhailiv.kmp.health.records.metadata/Metadata // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.metadata.<get-metadata>|<get-metadata>(){}[0]
+    final val startTime // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.startTime|{}startTime[0]
+        final fun <get-startTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.startTime.<get-startTime>|<get-startTime>(){}[0]
+
+    final fun component1(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.component1|component1(){}[0]
+    final fun component2(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.component2|component2(){}[0]
+    final fun component3(): com.viktormykhailiv.kmp.health.units/Energy // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.component3|component3(){}[0]
+    final fun component4(): com.viktormykhailiv.kmp.health.records.metadata/Metadata // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.component4|component4(){}[0]
+    final fun copy(kotlin.time/Instant = ..., kotlin.time/Instant = ..., com.viktormykhailiv.kmp.health.units/Energy = ..., com.viktormykhailiv.kmp.health.records.metadata/Metadata = ...): com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.copy|copy(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Energy;com.viktormykhailiv.kmp.health.records.metadata.Metadata){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord.toString|toString(){}[0]
+}
+
 final class com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord : com.viktormykhailiv.kmp.health/InstantaneousRecord { // com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord|null[0]
     constructor <init>(kotlin.time/Instant, com.viktormykhailiv.kmp.health.units/BloodGlucose, com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord.SpecimenSource?, com.viktormykhailiv.kmp.health.records/MealType?, com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord.RelationToMeal?, com.viktormykhailiv.kmp.health.records.metadata/Metadata) // com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord.<init>|<init>(kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.BloodGlucose;com.viktormykhailiv.kmp.health.records.BloodGlucoseRecord.SpecimenSource?;com.viktormykhailiv.kmp.health.records.MealType?;com.viktormykhailiv.kmp.health.records.BloodGlucoseRecord.RelationToMeal?;com.viktormykhailiv.kmp.health.records.metadata.Metadata){}[0]
 
@@ -1280,6 +1358,30 @@ final class com.viktormykhailiv.kmp.health.records/CyclingPedalingCadenceRecord 
         final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health.records/CyclingPedalingCadenceRecord.Sample.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health.records/CyclingPedalingCadenceRecord.Sample.toString|toString(){}[0]
     }
+}
+
+final class com.viktormykhailiv.kmp.health.records/DistanceRecord : com.viktormykhailiv.kmp.health/IntervalRecord { // com.viktormykhailiv.kmp.health.records/DistanceRecord|null[0]
+    constructor <init>(kotlin.time/Instant, kotlin.time/Instant, com.viktormykhailiv.kmp.health.units/Length, com.viktormykhailiv.kmp.health.records.metadata/Metadata = ...) // com.viktormykhailiv.kmp.health.records/DistanceRecord.<init>|<init>(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Length;com.viktormykhailiv.kmp.health.records.metadata.Metadata){}[0]
+
+    final val dataType // com.viktormykhailiv.kmp.health.records/DistanceRecord.dataType|{}dataType[0]
+        final fun <get-dataType>(): com.viktormykhailiv.kmp.health/HealthDataType // com.viktormykhailiv.kmp.health.records/DistanceRecord.dataType.<get-dataType>|<get-dataType>(){}[0]
+    final val distance // com.viktormykhailiv.kmp.health.records/DistanceRecord.distance|{}distance[0]
+        final fun <get-distance>(): com.viktormykhailiv.kmp.health.units/Length // com.viktormykhailiv.kmp.health.records/DistanceRecord.distance.<get-distance>|<get-distance>(){}[0]
+    final val endTime // com.viktormykhailiv.kmp.health.records/DistanceRecord.endTime|{}endTime[0]
+        final fun <get-endTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/DistanceRecord.endTime.<get-endTime>|<get-endTime>(){}[0]
+    final val metadata // com.viktormykhailiv.kmp.health.records/DistanceRecord.metadata|{}metadata[0]
+        final fun <get-metadata>(): com.viktormykhailiv.kmp.health.records.metadata/Metadata // com.viktormykhailiv.kmp.health.records/DistanceRecord.metadata.<get-metadata>|<get-metadata>(){}[0]
+    final val startTime // com.viktormykhailiv.kmp.health.records/DistanceRecord.startTime|{}startTime[0]
+        final fun <get-startTime>(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/DistanceRecord.startTime.<get-startTime>|<get-startTime>(){}[0]
+
+    final fun component1(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/DistanceRecord.component1|component1(){}[0]
+    final fun component2(): kotlin.time/Instant // com.viktormykhailiv.kmp.health.records/DistanceRecord.component2|component2(){}[0]
+    final fun component3(): com.viktormykhailiv.kmp.health.units/Length // com.viktormykhailiv.kmp.health.records/DistanceRecord.component3|component3(){}[0]
+    final fun component4(): com.viktormykhailiv.kmp.health.records.metadata/Metadata // com.viktormykhailiv.kmp.health.records/DistanceRecord.component4|component4(){}[0]
+    final fun copy(kotlin.time/Instant = ..., kotlin.time/Instant = ..., com.viktormykhailiv.kmp.health.units/Length = ..., com.viktormykhailiv.kmp.health.records.metadata/Metadata = ...): com.viktormykhailiv.kmp.health.records/DistanceRecord // com.viktormykhailiv.kmp.health.records/DistanceRecord.copy|copy(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.units.Length;com.viktormykhailiv.kmp.health.records.metadata.Metadata){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.viktormykhailiv.kmp.health.records/DistanceRecord.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.viktormykhailiv.kmp.health.records/DistanceRecord.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.viktormykhailiv.kmp.health.records/DistanceRecord.toString|toString(){}[0]
 }
 
 final class com.viktormykhailiv.kmp.health.records/ExerciseLap { // com.viktormykhailiv.kmp.health.records/ExerciseLap|null[0]
@@ -2378,10 +2480,17 @@ final class com.viktormykhailiv.kmp.health/SwiftHealthManager { // com.viktormyk
 
     final fun isAvailable(): kotlin/Boolean // com.viktormykhailiv.kmp.health/SwiftHealthManager.isAvailable|isAvailable(){}[0]
     final suspend fun aggregate(platform.Foundation/NSDate, platform.Foundation/NSDate, com.viktormykhailiv.kmp.health/HealthDataType): com.viktormykhailiv.kmp.health/HealthAggregatedRecord // com.viktormykhailiv.kmp.health/SwiftHealthManager.aggregate|aggregate(platform.Foundation.NSDate;platform.Foundation.NSDate;com.viktormykhailiv.kmp.health.HealthDataType){}[0]
+    final suspend fun aggregateActiveEnergyBurned(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord // com.viktormykhailiv.kmp.health/SwiftHealthManager.aggregateActiveEnergyBurned|aggregateActiveEnergyBurned(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
+    final suspend fun aggregateDistance(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord // com.viktormykhailiv.kmp.health/SwiftHealthManager.aggregateDistance|aggregateDistance(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
+    final suspend fun aggregateSteps(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/StepsAggregatedRecord // com.viktormykhailiv.kmp.health/SwiftHealthManager.aggregateSteps|aggregateSteps(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
     final suspend fun getRegionalPreferences(): com.viktormykhailiv.kmp.health.region/RegionalPreferences // com.viktormykhailiv.kmp.health/SwiftHealthManager.getRegionalPreferences|getRegionalPreferences(){}[0]
     final suspend fun isAuthorized(kotlin.collections/List<com.viktormykhailiv.kmp.health/HealthDataType>, kotlin.collections/List<com.viktormykhailiv.kmp.health/HealthDataType>): kotlin/Boolean // com.viktormykhailiv.kmp.health/SwiftHealthManager.isAuthorized|isAuthorized(kotlin.collections.List<com.viktormykhailiv.kmp.health.HealthDataType>;kotlin.collections.List<com.viktormykhailiv.kmp.health.HealthDataType>){}[0]
     final suspend fun isRevokeAuthorizationSupported(): kotlin/Boolean // com.viktormykhailiv.kmp.health/SwiftHealthManager.isRevokeAuthorizationSupported|isRevokeAuthorizationSupported(){}[0]
+    final suspend fun readActiveEnergyBurned(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord> // com.viktormykhailiv.kmp.health/SwiftHealthManager.readActiveEnergyBurned|readActiveEnergyBurned(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
     final suspend fun readData(platform.Foundation/NSDate, platform.Foundation/NSDate, com.viktormykhailiv.kmp.health/HealthDataType): kotlin.collections/List<com.viktormykhailiv.kmp.health/HealthRecord> // com.viktormykhailiv.kmp.health/SwiftHealthManager.readData|readData(platform.Foundation.NSDate;platform.Foundation.NSDate;com.viktormykhailiv.kmp.health.HealthDataType){}[0]
+    final suspend fun readDistance(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/DistanceRecord> // com.viktormykhailiv.kmp.health/SwiftHealthManager.readDistance|readDistance(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
+    final suspend fun readExercise(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/ExerciseSessionRecord> // com.viktormykhailiv.kmp.health/SwiftHealthManager.readExercise|readExercise(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
+    final suspend fun readSteps(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/StepsRecord> // com.viktormykhailiv.kmp.health/SwiftHealthManager.readSteps|readSteps(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
     final suspend fun requestAuthorization(kotlin.collections/List<com.viktormykhailiv.kmp.health/HealthDataType>, kotlin.collections/List<com.viktormykhailiv.kmp.health/HealthDataType>): kotlin/Boolean // com.viktormykhailiv.kmp.health/SwiftHealthManager.requestAuthorization|requestAuthorization(kotlin.collections.List<com.viktormykhailiv.kmp.health.HealthDataType>;kotlin.collections.List<com.viktormykhailiv.kmp.health.HealthDataType>){}[0]
     final suspend fun revokeAuthorization() // com.viktormykhailiv.kmp.health/SwiftHealthManager.revokeAuthorization|revokeAuthorization(){}[0]
     final suspend fun writeData(kotlin.collections/List<com.viktormykhailiv.kmp.health/HealthRecord>) // com.viktormykhailiv.kmp.health/SwiftHealthManager.writeData|writeData(kotlin.collections.List<com.viktormykhailiv.kmp.health.HealthRecord>){}[0]
@@ -2563,11 +2672,13 @@ final fun (com.viktormykhailiv.kmp.health.units/Temperature).com.viktormykhailiv
 final fun (kotlin.time/Instant).com.viktormykhailiv.kmp.health/toNSDate(): platform.Foundation/NSDate // com.viktormykhailiv.kmp.health/toNSDate|toNSDate@kotlin.time.Instant(){}[0]
 final fun (platform.Foundation/NSDate).com.viktormykhailiv.kmp.health/toKotlinInstant(): kotlin.time/Instant // com.viktormykhailiv.kmp.health/toKotlinInstant|toKotlinInstant@platform.Foundation.NSDate(){}[0]
 final fun com.viktormykhailiv.kmp.health/generateManualEntryMetadata(): com.viktormykhailiv.kmp.health.records.metadata/Metadata // com.viktormykhailiv.kmp.health/generateManualEntryMetadata|generateManualEntryMetadata(){}[0]
+final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateActiveEnergyBurned(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/ActiveEnergyBurnedAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateActiveEnergyBurned|aggregateActiveEnergyBurned@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateBloodGlucose(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/BloodGlucoseAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateBloodGlucose|aggregateBloodGlucose@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateBloodPressure(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/BloodPressureAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateBloodPressure|aggregateBloodPressure@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateBodyFat(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/BodyFatAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateBodyFat|aggregateBodyFat@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateBodyTemperature(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/BodyTemperatureAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateBodyTemperature|aggregateBodyTemperature@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateCyclingPedalingCadence(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/CyclingPedalingCadenceAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateCyclingPedalingCadence|aggregateCyclingPedalingCadence@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
+final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateDistance(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/DistanceAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateDistance|aggregateDistance@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateHeartRate(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/HeartRateAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateHeartRate|aggregateHeartRate@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateHeight(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/HeightAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateHeight|aggregateHeight@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateLeanBodyMass(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/LeanBodyMassAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateLeanBodyMass|aggregateLeanBodyMass@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
@@ -2575,11 +2686,13 @@ final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykha
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateSleep(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/SleepAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateSleep|aggregateSleep@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateSteps(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/StepsAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateSteps|aggregateSteps@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/aggregateWeight(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<com.viktormykhailiv.kmp.health.aggregate/WeightAggregatedRecord> // com.viktormykhailiv.kmp.health/aggregateWeight|aggregateWeight@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
+final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readActiveEnergyBurned(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/ActiveEnergyBurnedRecord>> // com.viktormykhailiv.kmp.health/readActiveEnergyBurned|readActiveEnergyBurned@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readBloodGlucose(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord>> // com.viktormykhailiv.kmp.health/readBloodGlucose|readBloodGlucose@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readBloodPressure(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BloodPressureRecord>> // com.viktormykhailiv.kmp.health/readBloodPressure|readBloodPressure@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readBodyFat(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BodyFatRecord>> // com.viktormykhailiv.kmp.health/readBodyFat|readBodyFat@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readBodyTemperature(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BodyTemperatureRecord>> // com.viktormykhailiv.kmp.health/readBodyTemperature|readBodyTemperature@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readCyclingPedalingCadence(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/CyclingPedalingCadenceRecord>> // com.viktormykhailiv.kmp.health/readCyclingPedalingCadence|readCyclingPedalingCadence@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
+final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readDistance(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/DistanceRecord>> // com.viktormykhailiv.kmp.health/readDistance|readDistance@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readExercise(kotlin.time/Instant, kotlin.time/Instant, com.viktormykhailiv.kmp.health/HealthDataType.Exercise = ...): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/ExerciseSessionRecord>> // com.viktormykhailiv.kmp.health/readExercise|readExercise@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant;com.viktormykhailiv.kmp.health.HealthDataType.Exercise){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readHeartRate(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/HeartRateRecord>> // com.viktormykhailiv.kmp.health/readHeartRate|readHeartRate@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/HealthManager).com.viktormykhailiv.kmp.health/readHeight(kotlin.time/Instant, kotlin.time/Instant): kotlin/Result<kotlin.collections/List<com.viktormykhailiv.kmp.health.records/HeightRecord>> // com.viktormykhailiv.kmp.health/readHeight|readHeight@com.viktormykhailiv.kmp.health.HealthManager(kotlin.time.Instant;kotlin.time.Instant){}[0]
@@ -2602,15 +2715,13 @@ final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktor
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/aggregateLeanBodyMass(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/LeanBodyMassAggregatedRecord // com.viktormykhailiv.kmp.health/aggregateLeanBodyMass|aggregateLeanBodyMass@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/aggregatePower(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/PowerAggregatedRecord // com.viktormykhailiv.kmp.health/aggregatePower|aggregatePower@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/aggregateSleep(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/SleepAggregatedRecord // com.viktormykhailiv.kmp.health/aggregateSleep|aggregateSleep@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
-final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/aggregateSteps(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/StepsAggregatedRecord // com.viktormykhailiv.kmp.health/aggregateSteps|aggregateSteps@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/aggregateWeight(platform.Foundation/NSDate, platform.Foundation/NSDate): com.viktormykhailiv.kmp.health.aggregate/WeightAggregatedRecord // com.viktormykhailiv.kmp.health/aggregateWeight|aggregateWeight@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readBloodGlucose(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BloodGlucoseRecord> // com.viktormykhailiv.kmp.health/readBloodGlucose|readBloodGlucose@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readBloodPressure(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BloodPressureRecord> // com.viktormykhailiv.kmp.health/readBloodPressure|readBloodPressure@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readBodyFat(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BodyFatRecord> // com.viktormykhailiv.kmp.health/readBodyFat|readBodyFat@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readBodyTemperature(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/BodyTemperatureRecord> // com.viktormykhailiv.kmp.health/readBodyTemperature|readBodyTemperature@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readCyclingPedalingCadence(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/CyclingPedalingCadenceRecord> // com.viktormykhailiv.kmp.health/readCyclingPedalingCadence|readCyclingPedalingCadence@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
-final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readExercise(platform.Foundation/NSDate, platform.Foundation/NSDate, com.viktormykhailiv.kmp.health/HealthDataType.Exercise = ...): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/ExerciseSessionRecord> // com.viktormykhailiv.kmp.health/readExercise|readExercise@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate;com.viktormykhailiv.kmp.health.HealthDataType.Exercise){}[0]
-final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readHeartRage(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/HeartRateRecord> // com.viktormykhailiv.kmp.health/readHeartRage|readHeartRage@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
+final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readHeartRate(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/HeartRateRecord> // com.viktormykhailiv.kmp.health/readHeartRate|readHeartRate@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readHeight(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/HeightRecord> // com.viktormykhailiv.kmp.health/readHeight|readHeight@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readLeanBodyMass(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/LeanBodyMassRecord> // com.viktormykhailiv.kmp.health/readLeanBodyMass|readLeanBodyMass@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readMenstruationFlow(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/MenstruationFlowRecord> // com.viktormykhailiv.kmp.health/readMenstruationFlow|readMenstruationFlow@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
@@ -2619,5 +2730,4 @@ final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktor
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readPower(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/PowerRecord> // com.viktormykhailiv.kmp.health/readPower|readPower@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readSexualActivity(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/SexualActivityRecord> // com.viktormykhailiv.kmp.health/readSexualActivity|readSexualActivity@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readSleep(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/SleepSessionRecord> // com.viktormykhailiv.kmp.health/readSleep|readSleep@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
-final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readSteps(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/StepsRecord> // com.viktormykhailiv.kmp.health/readSteps|readSteps@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]
 final suspend fun (com.viktormykhailiv.kmp.health/SwiftHealthManager).com.viktormykhailiv.kmp.health/readWeight(platform.Foundation/NSDate, platform.Foundation/NSDate): kotlin.collections/List<com.viktormykhailiv.kmp.health.records/WeightRecord> // com.viktormykhailiv.kmp.health/readWeight|readWeight@com.viktormykhailiv.kmp.health.SwiftHealthManager(platform.Foundation.NSDate;platform.Foundation.NSDate){}[0]

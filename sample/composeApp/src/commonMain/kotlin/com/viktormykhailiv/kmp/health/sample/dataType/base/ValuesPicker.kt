@@ -2,17 +2,15 @@ package com.viktormykhailiv.kmp.health.sample.dataType.base
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FilterChip
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Text
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <T> ValuesPicker(
     modifier: Modifier = Modifier,
@@ -32,13 +30,14 @@ fun <T> ValuesPicker(
             FilterChip(
                 selected = isSelected,
                 onClick = { onChanged(value) },
-            ) {
-                Text(
-                    text = mapper(value),
-                    style = LocalTextStyle.current
-                        .copy(fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal),
-                )
-            }
+                label = {
+                    Text(
+                        text = mapper(value),
+                        style = LocalTextStyle.current
+                            .copy(fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal),
+                    )
+                }
+            )
         }
     }
 }

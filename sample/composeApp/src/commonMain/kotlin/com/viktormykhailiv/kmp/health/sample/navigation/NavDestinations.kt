@@ -3,6 +3,8 @@ package com.viktormykhailiv.kmp.health.sample.navigation
 import kotlinx.serialization.Serializable
 
 sealed interface NavDestinations {
+    val route: String
+        get() = this::class.simpleName ?: ""
 
     @Serializable
     data object Root : NavDestinations

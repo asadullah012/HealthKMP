@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.aggregate.StepsAggregatedRecord
@@ -12,7 +12,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
 
 @Composable
-fun StepsScreen() {
+fun StepsScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeTextFieldScreen(
         title = "Steps",
         type = HealthDataType.Steps,
@@ -39,5 +39,6 @@ fun StepsScreen() {
             Text("Average $average")
             Text("Total $total")
         },
+        onBackClick = onBackClick,
     )
 }

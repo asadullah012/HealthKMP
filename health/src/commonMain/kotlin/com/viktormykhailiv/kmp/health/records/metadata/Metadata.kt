@@ -9,11 +9,11 @@ import com.viktormykhailiv.kmp.health.HealthRecord
  * @param id Unique identifier of this data.
  * @param device Optional client supplied device information associated with the data.
  */
-data class Metadata internal constructor(
-    val recordingMethod: RecordingMethod,
-    val id: String,
-    val device: Device?,
-) {
+    data class Metadata internal constructor(
+        val recordingMethod: RecordingMethod,
+        val id: String,
+        val device: Device?,
+    ) {
 
     sealed interface RecordingMethod {
 

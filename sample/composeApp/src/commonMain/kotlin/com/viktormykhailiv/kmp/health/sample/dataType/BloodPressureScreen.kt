@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.aggregate.BloodPressureAggregatedRecord
@@ -13,7 +13,7 @@ import kotlin.random.Random
 import kotlin.time.Clock
 
 @Composable
-fun BloodPressureScreen() {
+fun BloodPressureScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeScreen(
         title = "Blood pressure",
         type = HealthDataType.BloodPressure,
@@ -66,6 +66,7 @@ fun BloodPressureScreen() {
             Text("Min $systolicMin/$diastolicMin")
             Text("Max $systolicMax/$diastolicMax")
         },
+        onBackClick = onBackClick,
     )
 }
 

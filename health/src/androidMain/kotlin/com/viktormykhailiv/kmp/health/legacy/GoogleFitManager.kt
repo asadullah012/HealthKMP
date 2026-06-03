@@ -82,6 +82,9 @@ class GoogleFitManager(
     override suspend fun isRevokeAuthorizationSupported(): Result<Boolean> =
         Result.success(true)
 
+    override suspend fun isBackgroundSyncSupported(): Result<Boolean> =
+        Result.success(false)
+
     override suspend fun revokeAuthorization(): Result<Unit> = runCatching {
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         GoogleSignIn.getClient(context, options).signOut().await()

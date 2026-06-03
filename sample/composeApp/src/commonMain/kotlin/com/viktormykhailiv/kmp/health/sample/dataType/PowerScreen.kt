@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.aggregate.PowerAggregatedRecord
@@ -13,7 +13,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
-fun PowerScreen() {
+fun PowerScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeScreen(
         title = "Power",
         type = HealthDataType.Power,
@@ -53,5 +53,6 @@ fun PowerScreen() {
             Text("Min $min")
             Text("Max $max")
         },
+        onBackClick = onBackClick,
     )
 }

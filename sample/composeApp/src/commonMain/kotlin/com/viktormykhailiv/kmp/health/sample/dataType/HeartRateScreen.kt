@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.aggregate.HeartRateAggregatedRecord
@@ -12,7 +12,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
-fun HeartRateScreen() {
+fun HeartRateScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeScreen(
         title = "Heart rate",
         type = HealthDataType.HeartRate,
@@ -52,5 +52,6 @@ fun HeartRateScreen() {
             Text("Min $min")
             Text("Max $max")
         },
+        onBackClick = onBackClick,
     )
 }

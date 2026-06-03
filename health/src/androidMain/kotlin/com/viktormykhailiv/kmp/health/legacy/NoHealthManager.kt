@@ -37,6 +37,10 @@ internal class NoHealthManager : HealthManager {
         return Result.failure(unavailableException)
     }
 
+    override suspend fun isBackgroundSyncSupported(): Result<Boolean> {
+        return Result.failure(unavailableException)
+    }
+
     override suspend fun revokeAuthorization(): Result<Unit> {
         return Result.failure(unavailableException)
     }

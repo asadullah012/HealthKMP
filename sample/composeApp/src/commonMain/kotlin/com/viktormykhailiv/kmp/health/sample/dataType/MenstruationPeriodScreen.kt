@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.sample.dataType.base.DataTypeScreen
@@ -11,7 +11,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 
 @Composable
-fun MenstruationPeriodScreen() {
+fun MenstruationPeriodScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeScreen(
         title = "Menstruation period",
         type = HealthDataType.MenstruationPeriod,
@@ -36,5 +36,6 @@ fun MenstruationPeriodScreen() {
                 Text("Menstruation period ${it.duration}")
             }
         },
+        onBackClick = onBackClick,
     )
 }

@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.viktormykhailiv.kmp.health.HealthDataType
 import com.viktormykhailiv.kmp.health.aggregate.LeanBodyMassAggregatedRecord
@@ -13,7 +13,7 @@ import kotlin.random.Random
 import kotlin.time.Clock
 
 @Composable
-fun LeanBodyMassScreen() {
+fun LeanBodyMassScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeTextFieldScreen(
         title = "Lean body mass",
         type = HealthDataType.LeanBodyMass,
@@ -42,5 +42,6 @@ fun LeanBodyMassScreen() {
             Text("Min $min")
             Text("Max $max")
         },
+        onBackClick = onBackClick,
     )
 }

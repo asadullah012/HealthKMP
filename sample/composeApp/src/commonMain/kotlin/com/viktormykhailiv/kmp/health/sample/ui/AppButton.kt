@@ -3,9 +3,9 @@ package com.viktormykhailiv.kmp.health.sample.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.minimumInteractiveComponentSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +27,7 @@ fun AppButton(
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         text = text,
-        style = MaterialTheme.typography.button.copy(
+        style = MaterialTheme.typography.labelMedium.copy(
             color = Color.White,
             shadow = Shadow(
                 color = Color.Black,

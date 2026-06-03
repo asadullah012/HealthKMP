@@ -1,7 +1,7 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -13,7 +13,7 @@ import com.viktormykhailiv.kmp.health.records.SexualActivityRecord
 import kotlin.time.Clock
 
 @Composable
-fun SexualActivityScreen() {
+fun SexualActivityScreen(onBackClick: (() -> Unit)? = null) {
     val protections = remember {
         listOf(
             SexualActivityRecord.Protection.Unknown,
@@ -53,5 +53,6 @@ fun SexualActivityScreen() {
                 Text("Sexual activity ${it.protection}")
             }
         },
+        onBackClick = onBackClick,
     )
 }

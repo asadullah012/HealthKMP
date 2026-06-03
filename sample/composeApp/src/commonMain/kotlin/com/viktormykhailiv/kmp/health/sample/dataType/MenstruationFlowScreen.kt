@@ -1,7 +1,7 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -13,7 +13,7 @@ import com.viktormykhailiv.kmp.health.records.MenstruationFlowRecord
 import kotlin.time.Clock
 
 @Composable
-fun MenstruationFlowScreen() {
+fun MenstruationFlowScreen(onBackClick: (() -> Unit)? = null) {
     val flows = remember {
         listOf(
             MenstruationFlowRecord.Flow.Unknown,
@@ -54,5 +54,6 @@ fun MenstruationFlowScreen() {
                 Text("Menstruation flow ${it.flow}")
             }
         },
+        onBackClick = onBackClick,
     )
 }

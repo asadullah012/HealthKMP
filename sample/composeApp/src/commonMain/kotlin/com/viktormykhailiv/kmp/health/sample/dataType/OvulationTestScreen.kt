@@ -1,7 +1,7 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -13,7 +13,7 @@ import com.viktormykhailiv.kmp.health.records.OvulationTestRecord
 import kotlin.time.Clock
 
 @Composable
-fun OvulationTestScreen() {
+fun OvulationTestScreen(onBackClick: (() -> Unit)? = null) {
     val results = remember {
         listOf(
             OvulationTestRecord.Result.Inconclusive,
@@ -54,5 +54,6 @@ fun OvulationTestScreen() {
                 Text("Ovulation result ${it.result}")
             }
         },
+        onBackClick = onBackClick,
     )
 }

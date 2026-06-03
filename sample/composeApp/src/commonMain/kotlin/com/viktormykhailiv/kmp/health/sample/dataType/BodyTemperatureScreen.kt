@@ -1,6 +1,6 @@
 package com.viktormykhailiv.kmp.health.sample.dataType
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,7 +20,7 @@ import kotlin.random.Random
 import kotlin.time.Clock
 
 @Composable
-fun BodyTemperatureScreen() {
+fun BodyTemperatureScreen(onBackClick: (() -> Unit)? = null) {
     DataTypeTextFieldScreen(
         title = "Body temperature",
         type = HealthDataType.BodyTemperature,
@@ -62,5 +62,6 @@ fun BodyTemperatureScreen() {
             Text("Min $min")
             Text("Max $max")
         },
+        onBackClick = onBackClick,
     )
 }

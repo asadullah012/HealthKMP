@@ -40,7 +40,7 @@ class HealthConnectManager(
         writeTypes: List<HealthDataType>,
     ): Result<Boolean> = runCatching {
         val grantedPermissions = healthConnectClient.permissionController.getGrantedPermissions()
-
+        println(grantedPermissions)
         grantedPermissions.containsAll(readTypes.readPermissions) &&
                 grantedPermissions.containsAll(writeTypes.writePermissions)
     }
@@ -73,6 +73,9 @@ class HealthConnectManager(
             }
 
     override suspend fun isRevokeAuthorizationSupported(): Result<Boolean> =
+        Result.success(true)
+
+    override suspend fun isBackgroundSyncSupported(): Result<Boolean> =
         Result.success(true)
 
     override suspend fun revokeAuthorization(): Result<Unit> = runCatching {

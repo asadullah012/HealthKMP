@@ -52,6 +52,13 @@ interface HealthManager {
     suspend fun isRevokeAuthorizationSupported(): Result<Boolean>
 
     /**
+     * Checks if background sync is supported on the current platform.
+     *
+     * @return A [Result] containing true if supported, false otherwise.
+     */
+    suspend fun isBackgroundSyncSupported(): Result<Boolean>
+
+    /**
      * Revokes all previously granted authorizations.
      *
      * @return A [Result] containing [Unit] if successful.

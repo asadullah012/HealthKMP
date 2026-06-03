@@ -97,6 +97,9 @@ internal class HealthKitManager : HealthManager {
     override suspend fun isRevokeAuthorizationSupported(): Result<Boolean> =
         Result.success(false)
 
+    override suspend fun isBackgroundSyncSupported(): Result<Boolean> =
+        Result.success(false)
+
     override suspend fun revokeAuthorization(): Result<Unit> =
         Result.failure(NotImplementedError())
 

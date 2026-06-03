@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,6 +43,7 @@ inline fun <T, reified R : HealthRecord> DataTypeTextFieldScreen(
     noinline deserializer: (String) -> T,
     noinline writer: (T) -> List<R>,
     noinline listContent: @Composable (List<R>) -> Unit,
+    noinline onBackClick: (() -> Unit)? = null,
 ) {
     DataTypeTextFieldScreen<T, R, HealthAggregatedRecord>(
         title = title,
@@ -53,6 +54,7 @@ inline fun <T, reified R : HealthRecord> DataTypeTextFieldScreen(
         writer = writer,
         aggregatedContent = null,
         listContent = listContent,
+        onBackClick = onBackClick,
     )
 }
 
@@ -66,6 +68,7 @@ inline fun <T, reified R : HealthRecord, reified A : HealthAggregatedRecord> Dat
     noinline writer: (T) -> List<R>,
     noinline aggregatedContent: (@Composable (A) -> Unit)?,
     noinline listContent: @Composable (List<R>) -> Unit,
+    noinline onBackClick: (() -> Unit)? = null,
 ) {
     DataTypeScreen(
         recordKClass = R::class,
@@ -84,6 +87,7 @@ inline fun <T, reified R : HealthRecord, reified A : HealthAggregatedRecord> Dat
         },
         aggregatedContent = aggregatedContent,
         listContent = listContent,
+        onBackClick = onBackClick,
     )
 }
 
@@ -95,6 +99,7 @@ inline fun <T, reified R : HealthRecord> DataTypeScreen(
     noinline writer: (T) -> List<R>,
     noinline pickerContent: @Composable ColumnScope.(DataTypeScreenPickerController<T>) -> Unit,
     noinline listContent: @Composable (List<R>) -> Unit,
+    noinline onBackClick: (() -> Unit)? = null,
 ) {
     DataTypeScreen<T, R, HealthAggregatedRecord>(
         title = title,
@@ -104,6 +109,7 @@ inline fun <T, reified R : HealthRecord> DataTypeScreen(
         pickerContent = pickerContent,
         aggregatedContent = null,
         listContent = listContent,
+        onBackClick = onBackClick,
     )
 }
 
@@ -116,6 +122,7 @@ inline fun <T, reified R : HealthRecord, reified A : HealthAggregatedRecord> Dat
     noinline pickerContent: @Composable ColumnScope.(DataTypeScreenPickerController<T>) -> Unit,
     noinline aggregatedContent: (@Composable (A) -> Unit)?,
     noinline listContent: @Composable (List<R>) -> Unit,
+    noinline onBackClick: (() -> Unit)? = null,
 ) {
     DataTypeScreen(
         recordKClass = R::class,
@@ -127,6 +134,7 @@ inline fun <T, reified R : HealthRecord, reified A : HealthAggregatedRecord> Dat
         pickerContent = pickerContent,
         aggregatedContent = aggregatedContent,
         listContent = listContent,
+        onBackClick = onBackClick,
     )
 }
 
@@ -141,6 +149,7 @@ fun <T, R : HealthRecord, A : HealthAggregatedRecord> DataTypeScreen(
     pickerContent: @Composable ColumnScope.(controller: DataTypeScreenPickerController<T>) -> Unit,
     aggregatedContent: (@Composable (A) -> Unit)?,
     listContent: @Composable (List<R>) -> Unit,
+    onBackClick: (() -> Unit)? = null,
 ) {
     val healthManager = LocalHealthManager.current
     val coroutineScope = rememberCoroutineScope()
@@ -193,7 +202,7 @@ fun <T, R : HealthRecord, A : HealthAggregatedRecord> DataTypeScreen(
         topBar = {
             AppBar(
                 title = title,
-                withNavigationButton = true,
+                onBackClick = onBackClick,
             )
         },
     ) {
